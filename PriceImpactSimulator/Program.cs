@@ -5,7 +5,7 @@ using PriceImpactSimulator.Strategies;
 using PriceImpactSimulator.Engine;
 
 // simulation tick aligned with README specification
-var step = TimeSpan.FromMilliseconds(100);
+var step = TimeSpan.FromMilliseconds(10);
 
 var ctx = new StrategyContext
 {
@@ -18,21 +18,23 @@ var ctx = new StrategyContext
 var simParams = new MarketSimulator.SimParams(
     TickSize:      0.01m,
     StartMidPrice: 20.00m,
-    CancelProb:    0.01,
-    TrendLookback: 10,
-    PriceLookback: 10,
-    K1Imbalance:   0.60,
-    K2Trend:       0.50,
-    K3PriceDev:    0.15,
+    CancelProb:    0.005,
+    TrendLookback: 20,
+    PriceLookback: 20,
+    K1Imbalance: 0.40,
+    K2Trend    : 0.25,
+    K3PriceDev : 0.15,
     LambdaDepth:   0.15,
     Q0:            2500,
     LogNormMu:     7,
     LogNormSigma:  1.1,
     Seed:          42);
 
+//var strat1 = new LadderBidStrategy();
+var strat2 = new DripAccumThenDumpStrategy();
 
-var strategy = new LadderBidStrategy();
-var runner   = new SimulationRunner(strategy, simParams, ctx, logFolder: "logs");
+var runner = new SimulationRunner(strat2, simParams, ctx, "logs");
+
 
 runner.Run(TimeSpan.FromMinutes(1));
 

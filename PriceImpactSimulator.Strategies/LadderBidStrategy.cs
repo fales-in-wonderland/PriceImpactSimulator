@@ -25,8 +25,8 @@ public sealed class LadderBidStrategy : IStrategy, IStrategyWithStats
         BuyingPowerUsed: _bpOrders + _position * _vwap,
         Position: _position,
         Vwap: _position > 0 ? _vwap : 0m,
-        PnL: _position * (_lastMid - (_position > 0 ? _vwap : 0m))
-    );
+        PnL: _position * (_lastMid - (_position > 0 ? _vwap : 0m)),
+        RealisedPnL: 0m);
 
     public void Initialize(in StrategyContext ctx)
     {
@@ -43,6 +43,8 @@ public sealed class LadderBidStrategy : IStrategy, IStrategyWithStats
             _lastMid = (snapshot.Bids[0].Price + snapshot.Asks[0].Price) / 2m;
     }
 
+    private readonly Queue<OrderCommand> _pendingCancels = new();
+
     public void OnExecution(in ExecutionReport report)
     {
         var orderId = report.OrderId;
@@ -55,21 +57,21 @@ public sealed class LadderBidStrategy : IStrategy, IStrategyWithStats
         }
         else if (idx >= 0 && report.ExecType == ExecType.Trade && report.LastQty > 0)
         {
-            var entry = _orders[idx];
-            _bpOrders -= entry.price * report.LastQty;
+            _ctx.Logger("Got touched ‑ cancelling ladder to stay flat");
 
-            int prevPos = _position;
-            _position += report.LastQty;
-            _vwap = prevPos == 0
-                ? report.Price
-                : (_vwap * prevPos + report.Price * report.LastQty) / _position;
-            _ctx.Logger($"Fill {report.LastQty} @ {report.Price:F2}; pos={_position}");
 
-            var remaining = report.LeavesQty;
-            if (remaining == 0)
-                _orders.RemoveAt(idx);
-            else
-                _orders[idx] = (entry.id, entry.price, remaining);
+            foreach (var (id, p, q) in _orders)
+            {
+                _bpOrders -= p * q;
+            }
+
+            foreach (var o in _orders.Select(o => OrderCommand.Cancel(o.id)))
+            {
+                _pendingCancels.Enqueue(o);
+            }
+
+            _orders.Clear();
+            return;
         }
         else if (idx >= 0 && report.ExecType == ExecType.Cancel)
         {
@@ -82,6 +84,13 @@ public sealed class LadderBidStrategy : IStrategy, IStrategyWithStats
 
     public IReadOnlyList<OrderCommand> GenerateCommands(DateTime utcNow)
     {
+        if (_pendingCancels.Count > 0)
+        {
+            var c = _pendingCancels.ToArray();
+            _pendingCancels.Clear();
+            return c;
+        }
+
         if (utcNow - _startTime < _delay || _lastBestBid == 0m)
             return Array.Empty<OrderCommand>();
 
@@ -104,7 +113,7 @@ public sealed class LadderBidStrategy : IStrategy, IStrategyWithStats
         _ctx.Logger($"Placing ladder from {startPrice:F2}");
         const int levels = 5;
         const double lambda = 0.5;
-        const int baseQty = 1000;
+        const int baseQty = 3000;
         var cmds = new List<OrderCommand>(levels);
         for (int i = 0; i < levels; i++)
         {
@@ -115,6 +124,7 @@ public sealed class LadderBidStrategy : IStrategy, IStrategyWithStats
             _orders.Add((id, price, qty));
             _bpOrders += price * qty;
         }
+
         return cmds;
     }
 
@@ -127,4 +137,3 @@ public sealed class LadderBidStrategy : IStrategy, IStrategyWithStats
         return cancel;
     }
 }
-

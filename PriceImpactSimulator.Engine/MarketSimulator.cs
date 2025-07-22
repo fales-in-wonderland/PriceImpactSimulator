@@ -12,11 +12,10 @@ public sealed class MarketSimulator
     private readonly Random _rng;
     private readonly SimParams _p;
     private readonly decimal _startMid;
+    private readonly HashSet<Guid> _houseLiquidity = new();
 
-    
-
-    private readonly Queue<Trade> _recentTrades = new();                 // last N trades
-    private readonly Queue<decimal> _midHistory = new();                // last N mids
+    private readonly Queue<Trade> _recentTrades = new(); // last N trades
+    private readonly Queue<decimal> _midHistory = new(); // last N mids
 
     public MarketSimulator(OrderBook book, SimParams p)
     {
@@ -46,27 +45,27 @@ public sealed class MarketSimulator
     public record SimParams(
         decimal TickSize,
         decimal StartMidPrice,
-        double  CancelProb,
-        int     TrendLookback,
-        int     PriceLookback,
-        double  K1Imbalance,
-        double  K2Trend,
-        double  K3PriceDev,
-        double  LambdaDepth,
-        int     Q0,
-        double  LogNormMu,
-        double  LogNormSigma,
-        int     Seed);
+        double CancelProb,
+        int TrendLookback,
+        int PriceLookback,
+        double K1Imbalance,
+        double K2Trend,
+        double K3PriceDev,
+        double LambdaDepth,
+        int Q0,
+        double LogNormMu,
+        double LogNormSigma,
+        int Seed);
 
 
     /// <summary>Выполняет один 100‑мс «тик» симуляции.</summary>
     public (IEnumerable<ExecutionReport> execs,
-            IEnumerable<Trade> trades,
-            IEnumerable<ExecutionReport> cancels)
+        IEnumerable<Trade> trades,
+        IEnumerable<ExecutionReport> cancels)
         Step(DateTime ts)
     {
         EnsureLiquidity(ts);
-        
+
         // 1. случайные отмены
         var cancelReports = CancelRandom(ts);
 
@@ -114,61 +113,68 @@ public sealed class MarketSimulator
     // ---------- helpers ----------------------------------------------------
     private void EnsureLiquidity(DateTime ts)
     {
+        decimal mid = _book.Mid ?? _startMid;
         const int Depth = 10;
+
+        // Keep a list of simulator orders that SHOULD remain after this tick
+        var keep = new HashSet<Guid>();
+
         for (int lvl = 0; lvl < Depth; lvl++)
         {
-            decimal bidPrice = _startMid - (lvl + 1) * _p.TickSize;
-            decimal askPrice = _startMid + (lvl + 1) * _p.TickSize;
-            int targetQty = (int)Math.Round(_p.Q0 * Math.Exp(-_p.LambdaDepth * lvl));
+            decimal bidPrice = mid - (lvl + 1) * _p.TickSize;
+            decimal askPrice = mid + (lvl + 1) * _p.TickSize;
+            int     target   = (int)Math.Round(_p.Q0 * Math.Exp(-_p.LambdaDepth * lvl));
 
-            AdjustLevel(Side.Buy, bidPrice, targetQty, ts);
-            AdjustLevel(Side.Sell, askPrice, targetQty, ts);
+            keep.UnionWith(AdjustLevel(Side.Buy , bidPrice, target, ts));
+            keep.UnionWith(AdjustLevel(Side.Sell, askPrice, target, ts));
         }
 
-        CancelBeyondDepth(Side.Buy, _startMid - Depth * _p.TickSize, ts, lower: true);
-        CancelBeyondDepth(Side.Sell, _startMid + Depth * _p.TickSize, ts, lower: false);
-    }
-
-    private void CancelBeyondDepth(Side side, decimal limitPrice, DateTime ts, bool lower)
-    {
-        var book = side == Side.Buy ? _book.BidsInternal : _book.AsksInternal;
-        var prices = lower
-            ? book.Keys.Where(p => p < limitPrice).ToList()
-            : book.Keys.Where(p => p > limitPrice).ToList();
-
-        foreach (var price in prices)
+        // Kill any *old* house order that is no longer in the ±Depth band
+        foreach (var id in _houseLiquidity.Except(keep).ToArray())
         {
-            foreach (var ord in _book.OrdersAtPrice(side, price))
-                _book.Cancel(ord.Id, ts).ToList();
+            _book.Cancel(id, ts).ToList();
+            _houseLiquidity.Remove(id);
         }
     }
 
-    private void AdjustLevel(Side side, decimal price, int targetQty, DateTime ts)
+    private IEnumerable<Guid> AdjustLevel(Side side, decimal price, int targetQty, DateTime ts)
     {
-        int current = _book.QuantityAt(side, price);
-        if (current < targetQty)
+        // Split existing volume into house vs. user
+        var allAtPrice   = _book.OrdersAtPrice(side, price);
+        int houseQty     = allAtPrice.Where(o => _houseLiquidity.Contains(o.Id))
+            .Sum(o => o.Quantity);
+        int delta        = targetQty - houseQty;
+        var idsToKeep    = new List<Guid>();
+
+        // Top‑up if we’re short
+        if (delta > 0)
         {
-            _book.AddLimit(new Order(Guid.NewGuid(), ts, side, price,
-                targetQty - current, OrderType.Limit, null), ts);
-            return;
+            var id = Guid.NewGuid();
+            _book.AddLimit(new Order(id, ts, side, price, delta,
+                OrderType.Limit, null), ts);
+
+            _houseLiquidity.Add(id);
+            idsToKeep.Add(id);
         }
 
-        if (current > targetQty)
+        // Trim if we’re long
+        if (delta < 0)
         {
-            int excess = current - targetQty;
-            foreach (var ord in _book.OrdersAtPrice(side, price))
+            int excess = -delta;
+            foreach (var ord in allAtPrice.Where(o => _houseLiquidity.Contains(o.Id)))
             {
-                if (excess <= 0) break;
-                foreach (var _ in _book.Cancel(ord.Id, ts)) { }
+                if (excess <= 0) { idsToKeep.Add(ord.Id); continue; }
+
+                _book.Cancel(ord.Id, ts).ToList();
+                _houseLiquidity.Remove(ord.Id);
                 excess -= ord.Quantity;
             }
-
-            if (excess < 0)
-            {
-                _book.AddLimit(new Order(Guid.NewGuid(), ts, side, price,
-                    -excess, OrderType.Limit, null), ts);
-            }
         }
+
+        // Return IDs that should survive this tick (for global keep‑set)
+        idsToKeep.AddRange(allAtPrice.Where(o => _houseLiquidity.Contains(o.Id))
+            .Select(o => o.Id));
+        return idsToKeep;
     }
 
     private (double pBuy, Side biasDir) CalcDirectionProb()
@@ -192,7 +198,7 @@ public sealed class MarketSimulator
             var first = _midHistory.Peek();
             priceDev = (double)((_book.Mid - first) / _p.TickSize) * 0.01; // normalised per tick
         }
-        
+
         var pBuy = 0.5 + _p.K1Imbalance * imb + _p.K2Trend * trend - _p.K3PriceDev * priceDev;
         pBuy = Math.Clamp(pBuy, 0.05, 0.95);
         return (pBuy, imb >= 0 ? Side.Buy : Side.Sell);
@@ -206,6 +212,7 @@ public sealed class MarketSimulator
             if (_rng.NextDouble() < _p.CancelProb)
                 canceled.AddRange(_book.Cancel(id, ts));
         }
+
         return canceled;
     }
 

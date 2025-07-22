@@ -1,4 +1,5 @@
 ﻿// File: CsvSink.cs
+
 using System;
 using System.Globalization;
 using System.IO;
@@ -56,12 +57,14 @@ public sealed class CsvSink : IDisposable
         for (int i = 0; i < depth; i++)
         {
             string bidPrice = i < snap.Bids.Length ? snap.Bids[i].Price.ToString("F2") : string.Empty;
-            string bidQty   = i < snap.Bids.Length ? snap.Bids[i].Quantity.ToString() : string.Empty;
+            string bidQty = i < snap.Bids.Length ? snap.Bids[i].Quantity.ToString() : string.Empty;
             string askPrice = i < snap.Asks.Length ? snap.Asks[i].Price.ToString("F2") : string.Empty;
-            string askQty   = i < snap.Asks.Length ? snap.Asks[i].Quantity.ToString() : string.Empty;
+            string askQty = i < snap.Asks.Length ? snap.Asks[i].Quantity.ToString() : string.Empty;
 
             _books.WriteLine($"{snap.Timestamp:O},{bidPrice},{bidQty},{askPrice},{askQty}");
         }
+
+        _books.WriteLine($"                                   ");
     }
 
     public void LogEvent(string message)

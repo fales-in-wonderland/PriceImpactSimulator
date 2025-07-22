@@ -37,6 +37,9 @@ public sealed class OrderBook
     public (IEnumerable<ExecutionReport> execs, IEnumerable<Trade> trades)
         AddLimit(Order order, DateTime ts)
     {
+        if (order.Price == 0m)
+            return ExecuteMarketAggressor(order, ts);
+        
         var execs = new List<ExecutionReport>();
         var trades = new List<Trade>();
 
@@ -104,6 +107,51 @@ public sealed class OrderBook
         return (execs, trades);
     }
 
+    // --- NEW helper ----------------------------------------------------------
+    private (IEnumerable<ExecutionReport> execs, IEnumerable<Trade> trades)
+        ExecuteMarketAggressor(Order aggressor, DateTime ts)
+    {
+        var execs  = new List<ExecutionReport>();
+        var trades = new List<Trade>();
+
+        var side = aggressor.Side;
+        int qty  = aggressor.Quantity;
+        var book = side == Side.Buy ? _asks : _bids;
+
+        while (qty > 0 && book.Count > 0)
+        {
+            var price = book.Keys.First();
+            var queue = book[price];
+
+            while (queue.Count > 0 && qty > 0)
+            {
+                var resting  = queue.Peek();
+                var execQty  = int.Min(qty, resting.Quantity);
+                var leavesAg = qty - execQty;
+                var leavesRs = resting.Quantity - execQty;
+
+                trades.Add(new Trade(ts, side, price, execQty));
+
+                // report for resting
+                execs.Add(new ExecutionReport(resting.Id, ExecType.Trade, resting.Side,
+                    price, execQty, leavesRs, ts));
+                // report for aggressor  ←–– ЭТОГО РАНЬШЕ НЕ БЫЛО
+                execs.Add(new ExecutionReport(aggressor.Id, ExecType.Trade, aggressor.Side,
+                    price, execQty, leavesAg, ts));
+
+                // book maintenance
+                queue.Dequeue();
+                if (leavesRs > 0) queue.Enqueue(resting with { Quantity = leavesRs });
+                else              _index.Remove(resting.Id);
+
+                qty = leavesAg;
+            }
+            if (queue.Count == 0) book.Remove(price);
+        }
+        return (execs, trades);
+    }
+
+    
     public int QuantityAt(Side side, decimal price)
     {
         var book = side == Side.Buy ? _bids : _asks;

@@ -70,7 +70,7 @@ public sealed class SimulationRunner
             if (now >= nextBookDump)
             {
                 _sink.LogBook(snap);
-                nextBookDump = now + TimeSpan.FromSeconds(10);
+                nextBookDump = now + TimeSpan.FromSeconds(2);
             }
 
             if (now >= nextStats && _strategy is IStrategyWithStats s)
@@ -80,12 +80,6 @@ public sealed class SimulationRunner
                 nextStats = now + TimeSpan.FromSeconds(2);
             }
 
-            // исполнение наших приказов
-            /* примечание: для «нулевой» стратегии список пуст, 
-               в MomentumIgnitor мы будем проверять exec.Side совпадает с нашими Id */
-            // ...
-
-            // стратегия выдаёт команды
             var cmds = _strategy.GenerateCommands(now);
             foreach (var cmd in cmds) Apply(cmd, now);
 
