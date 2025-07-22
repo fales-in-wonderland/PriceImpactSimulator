@@ -37,6 +37,7 @@ public sealed class SimulationRunner
     {
         var now = DateTime.UtcNow;
         var end = now + duration;
+        var nextBookDump = now;
 
         while (now < end)
         {
@@ -50,6 +51,12 @@ public sealed class SimulationRunner
             // книга → стратегия
             var snap = _book.Snapshot(now, depthLevels: 10);
             _strategy.OnOrderBook(snap);
+
+            if (now >= nextBookDump)
+            {
+                _sink.LogBook(snap);
+                nextBookDump = now + TimeSpan.FromSeconds(10);
+            }
 
             // исполнение наших приказов
             /* примечание: для «нулевой» стратегии список пуст, 

@@ -22,15 +22,19 @@ public sealed class MarketSimulator
         _book = book;
         _rng = new Random(p.Seed);
         _p = p;
-        _startMid = p.StartMidPrice;;
+        _startMid = p.StartMidPrice;
 
         for (int lvl = 0; lvl < 10; lvl++)
         {
             var vol = (int)Math.Round(_p.Q0 * Math.Exp(-_p.LambdaDepth * lvl));
+
+            var askPrice = _startMid + (lvl + 1) * _p.TickSize;
+            var bidPrice = _startMid - (lvl + 1) * _p.TickSize;
+
             _book.AddLimit(new Order(Guid.NewGuid(), DateTime.UtcNow,
-                Side.Sell, 20.00m + lvl * _p.TickSize, vol, OrderType.Limit, null));
+                Side.Sell, askPrice, vol, OrderType.Limit, null));
             _book.AddLimit(new Order(Guid.NewGuid(), DateTime.UtcNow,
-                Side.Buy, 19.99m - lvl * _p.TickSize, vol, OrderType.Limit, null));
+                Side.Buy, bidPrice, vol, OrderType.Limit, null));
         }
     }
 
@@ -113,24 +117,22 @@ public sealed class MarketSimulator
     // ---------- helpers ----------------------------------------------------
     private void EnsureLiquidity(DateTime ts)
     {
-        if (_book.BestBid is null || _book.BestAsk is null)
+        var snap = _book.Snapshot(ts, 1);
+        int threshold = (int)(_p.Q0 * 0.25);
+
+        decimal bestBid = _book.BestBid ?? (_startMid - _p.TickSize);
+        decimal bestAsk = _book.BestAsk ?? (_startMid + _p.TickSize);
+
+        if (snap.Bids.Length == 0 || snap.Bids[0].Quantity < threshold)
         {
-            var mid = _book.Mid ?? 20.00m;
-            decimal startBid = mid - _p.TickSize;
-            decimal startAsk = mid + _p.TickSize;
+            _book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Buy,
+                bestBid, _p.Q0, OrderType.Limit, null));
+        }
 
-            int baseVol = _p.Q0;
-            for (int lvl = 0; lvl < 3; lvl++)
-            {
-                int vol = (int)Math.Round(baseVol * Math.Exp(-_p.LambdaDepth * lvl));
-                if (_book.BestBid == null)
-                    _book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Buy,
-                        startBid - lvl * _p.TickSize, vol, OrderType.Limit, null));
-
-                if (_book.BestAsk == null)
-                    _book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Sell,
-                        startAsk + lvl * _p.TickSize, vol, OrderType.Limit, null));
-            }
+        if (snap.Asks.Length == 0 || snap.Asks[0].Quantity < threshold)
+        {
+            _book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Sell,
+                bestAsk, _p.Q0, OrderType.Limit, null));
         }
     }
 

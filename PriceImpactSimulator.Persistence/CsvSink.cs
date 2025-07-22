@@ -12,6 +12,7 @@ public sealed class CsvSink : IDisposable
 {
     private readonly StreamWriter _trades;
     private readonly StreamWriter _orders;
+    private readonly StreamWriter _books;
 
     public CsvSink(string folderUtc)
     {
@@ -23,6 +24,8 @@ public sealed class CsvSink : IDisposable
             "ts,side,price,qty");
         _orders = Create(Path.Combine(folderUtc, $"orders_{stamp}.csv"),
             "ts,orderId,execType,side,price,lastQty,leaves");
+        _books = Create(Path.Combine(folderUtc, $"book_{stamp}.csv"),
+            "ts,side,price,qty");
 
         static StreamWriter Create(string path, string header)
         {
@@ -41,10 +44,19 @@ public sealed class CsvSink : IDisposable
         _orders.WriteLine($"{e.Timestamp:O},{e.OrderId},{e.ExecType},{e.Side}," +
                           $"{e.Price:F2},{e.LastQty},{e.LeavesQty}");
 
+    public void LogBook(in OrderBookSnapshot snap)
+    {
+        foreach (var l in snap.Bids)
+            _books.WriteLine($"{snap.Timestamp:O},Bid,{l.Price:F2},{l.Quantity}");
+        foreach (var l in snap.Asks)
+            _books.WriteLine($"{snap.Timestamp:O},Ask,{l.Price:F2},{l.Quantity}");
+    }
+
     // ---------- housekeeping ----------
     public void Dispose()
     {
         _trades.Dispose();
         _orders.Dispose();
+        _books.Dispose();
     }
 }
