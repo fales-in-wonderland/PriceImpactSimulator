@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PriceImpactSimulator.Domain;
 
 namespace PriceImpactSimulator.Engine;
@@ -126,6 +127,23 @@ public sealed class MarketSimulator
 
             AdjustLevel(Side.Buy, bidPrice, targetQty, ts);
             AdjustLevel(Side.Sell, askPrice, targetQty, ts);
+        }
+
+        CancelBeyondDepth(Side.Buy, _startMid - Depth * _p.TickSize, ts, lower: true);
+        CancelBeyondDepth(Side.Sell, _startMid + Depth * _p.TickSize, ts, lower: false);
+    }
+
+    private void CancelBeyondDepth(Side side, decimal limitPrice, DateTime ts, bool lower)
+    {
+        var book = side == Side.Buy ? _book.BidsInternal : _book.AsksInternal;
+        var prices = lower
+            ? book.Keys.Where(p => p < limitPrice).ToList()
+            : book.Keys.Where(p => p > limitPrice).ToList();
+
+        foreach (var price in prices)
+        {
+            foreach (var ord in _book.OrdersAtPrice(side, price))
+                _book.Cancel(ord.Id, ts).ToList();
         }
     }
 

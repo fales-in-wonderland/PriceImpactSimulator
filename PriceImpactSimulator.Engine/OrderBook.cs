@@ -27,6 +27,9 @@ public sealed class OrderBook
         }
     }
 
+    internal SortedDictionary<decimal, Queue<Order>> BidsInternal => _bids;
+    internal SortedDictionary<decimal, Queue<Order>> AsksInternal => _asks;
+
 
     #region Public API ------------------------------------------------------
 
