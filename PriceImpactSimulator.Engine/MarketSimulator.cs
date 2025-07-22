@@ -117,22 +117,43 @@ public sealed class MarketSimulator
     // ---------- helpers ----------------------------------------------------
     private void EnsureLiquidity(DateTime ts)
     {
-        var snap = _book.Snapshot(ts, 1);
-        int threshold = (int)(_p.Q0 * 0.25);
-
-        decimal bestBid = _book.BestBid ?? (_startMid - _p.TickSize);
-        decimal bestAsk = _book.BestAsk ?? (_startMid + _p.TickSize);
-
-        if (snap.Bids.Length == 0 || snap.Bids[0].Quantity < threshold)
+        const int Depth = 10;
+        for (int lvl = 0; lvl < Depth; lvl++)
         {
-            _book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Buy,
-                bestBid, _p.Q0, OrderType.Limit, null));
+            decimal bidPrice = _startMid - (lvl + 1) * _p.TickSize;
+            decimal askPrice = _startMid + (lvl + 1) * _p.TickSize;
+            int targetQty = (int)Math.Round(_p.Q0 * Math.Exp(-_p.LambdaDepth * lvl));
+
+            AdjustLevel(Side.Buy, bidPrice, targetQty, ts);
+            AdjustLevel(Side.Sell, askPrice, targetQty, ts);
+        }
+    }
+
+    private void AdjustLevel(Side side, decimal price, int targetQty, DateTime ts)
+    {
+        int current = _book.QuantityAt(side, price);
+        if (current < targetQty)
+        {
+            _book.AddLimit(new Order(Guid.NewGuid(), ts, side, price,
+                targetQty - current, OrderType.Limit, null));
+            return;
         }
 
-        if (snap.Asks.Length == 0 || snap.Asks[0].Quantity < threshold)
+        if (current > targetQty)
         {
-            _book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Sell,
-                bestAsk, _p.Q0, OrderType.Limit, null));
+            int excess = current - targetQty;
+            foreach (var ord in _book.OrdersAtPrice(side, price))
+            {
+                if (excess <= 0) break;
+                _book.Cancel(ord.Id, ts);
+                excess -= ord.Quantity;
+            }
+
+            if (excess < 0)
+            {
+                _book.AddLimit(new Order(Guid.NewGuid(), ts, side, price,
+                    -excess, OrderType.Limit, null));
+            }
         }
     }
 

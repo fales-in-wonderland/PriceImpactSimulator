@@ -42,6 +42,18 @@ public sealed class OrderBook
         _index[order.Id] = (order.Price, order.Side);
     }
 
+    public int QuantityAt(Side side, decimal price)
+    {
+        var book = side == Side.Buy ? _bids : _asks;
+        return book.TryGetValue(price, out var q) ? q.Sum(o => o.Quantity) : 0;
+    }
+
+    public Order[] OrdersAtPrice(Side side, decimal price)
+    {
+        var book = side == Side.Buy ? _bids : _asks;
+        return book.TryGetValue(price, out var q) ? q.ToArray() : Array.Empty<Order>();
+    }
+
     public IEnumerable<ExecutionReport> Cancel(Guid orderId, DateTime ts)
     {
         if (!_index.TryGetValue(orderId, out var meta))
