@@ -25,7 +25,7 @@ public sealed class CsvSink : IDisposable
         _orders = Create(Path.Combine(folderUtc, $"orders_{stamp}.csv"),
             "ts,orderId,execType,side,price,lastQty,leaves");
         _books = Create(Path.Combine(folderUtc, $"book_{stamp}.csv"),
-            "ts,side,price,qty");
+            "ts,bidPrice,bidQty,askPrice,askQty");
 
         static StreamWriter Create(string path, string header)
         {
@@ -46,10 +46,16 @@ public sealed class CsvSink : IDisposable
 
     public void LogBook(in OrderBookSnapshot snap)
     {
-        foreach (var l in snap.Bids)
-            _books.WriteLine($"{snap.Timestamp:O},Bid,{l.Price:F2},{l.Quantity}");
-        foreach (var l in snap.Asks)
-            _books.WriteLine($"{snap.Timestamp:O},Ask,{l.Price:F2},{l.Quantity}");
+        var depth = Math.Max(snap.Bids.Length, snap.Asks.Length);
+        for (int i = 0; i < depth; i++)
+        {
+            string bidPrice = i < snap.Bids.Length ? snap.Bids[i].Price.ToString("F2") : string.Empty;
+            string bidQty   = i < snap.Bids.Length ? snap.Bids[i].Quantity.ToString() : string.Empty;
+            string askPrice = i < snap.Asks.Length ? snap.Asks[i].Price.ToString("F2") : string.Empty;
+            string askQty   = i < snap.Asks.Length ? snap.Asks[i].Quantity.ToString() : string.Empty;
+
+            _books.WriteLine($"{snap.Timestamp:O},{bidPrice},{bidQty},{askPrice},{askQty}");
+        }
     }
 
     // ---------- housekeeping ----------

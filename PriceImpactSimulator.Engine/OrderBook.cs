@@ -114,10 +114,10 @@ public sealed class OrderBook
 
     public OrderBookSnapshot Snapshot(DateTime ts, int depthLevels)
     {
-        static OrderBookLevel[] TakeLevels(SortedDictionary<decimal, Queue<Order>> src, bool desc, int n)
+        static OrderBookLevel[] TakeLevels(IEnumerable<KeyValuePair<decimal, Queue<Order>>> src, int n)
         {
             var arr = new List<OrderBookLevel>(n);
-            foreach (var kv in desc ? src : src)
+            foreach (var kv in src)
             {
                 arr.Add(new OrderBookLevel(kv.Key, kv.Value.Sum(o => o.Quantity)));
                 if (arr.Count == n) break;
@@ -128,8 +128,8 @@ public sealed class OrderBook
         return new OrderBookSnapshot
         {
             Timestamp = ts,
-            Bids = TakeLevels(_bids, true, depthLevels),
-            Asks = TakeLevels(_asks, false, depthLevels)
+            Bids = TakeLevels(_bids, depthLevels),
+            Asks = TakeLevels(_asks, depthLevels)
         };
     }
 

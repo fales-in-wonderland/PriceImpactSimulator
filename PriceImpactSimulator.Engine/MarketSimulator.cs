@@ -87,7 +87,7 @@ public sealed class MarketSimulator
         {
             var priceOffset = Math.Abs(RandomNormal(0, 1.5));
             var signedOff = side == Side.Buy ? -priceOffset : priceOffset;
-            var midBase = _book.Mid ?? 20.00m;
+            var midBase = _book.Mid ?? _startMid;
             var price = Math.Round(midBase + (decimal)signedOff * _p.TickSize, 2);
 
 
