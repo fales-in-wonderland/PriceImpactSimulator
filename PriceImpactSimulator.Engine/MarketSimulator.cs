@@ -163,7 +163,7 @@ public sealed class MarketSimulator
             foreach (var ord in _book.OrdersAtPrice(side, price))
             {
                 if (excess <= 0) break;
-                _book.Cancel(ord.Id, ts);
+                foreach (var _ in _book.Cancel(ord.Id, ts)) { }
                 excess -= ord.Quantity;
             }
 
