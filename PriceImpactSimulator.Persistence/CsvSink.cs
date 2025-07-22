@@ -13,6 +13,8 @@ public sealed class CsvSink : IDisposable
     private readonly StreamWriter _trades;
     private readonly StreamWriter _orders;
     private readonly StreamWriter _books;
+    private readonly StreamWriter _events;
+    private readonly StreamWriter _stats;
 
     public CsvSink(string folderUtc)
     {
@@ -24,8 +26,12 @@ public sealed class CsvSink : IDisposable
             "ts,side,price,qty");
         _orders = Create(Path.Combine(folderUtc, $"orders_{stamp}.csv"),
             "ts,orderId,execType,side,price,lastQty,leaves");
-        _books = Create(Path.Combine(folderUtc, $"book_{stamp}.csv"),
+        _books  = Create(Path.Combine(folderUtc, $"book_{stamp}.csv"),
             "ts,bidPrice,bidQty,askPrice,askQty");
+        _events = Create(Path.Combine(folderUtc, $"events_{stamp}.csv"),
+            "ts,message");
+        _stats  = Create(Path.Combine(folderUtc, $"stats_{stamp}.csv"),
+            "ts,buyPower,position,vwap,pnl");
 
         static StreamWriter Create(string path, string header)
         {
@@ -58,11 +64,19 @@ public sealed class CsvSink : IDisposable
         }
     }
 
+    public void LogEvent(string message)
+        => _events.WriteLine($"{DateTime.UtcNow:O},{message}");
+
+    public void LogStats(DateTime ts, decimal buyPower, int pos, decimal vwap, decimal pnl)
+        => _stats.WriteLine($"{ts:O},{buyPower:F2},{pos},{vwap:F2},{pnl:F2}");
+
     // ---------- housekeeping ----------
     public void Dispose()
     {
         _trades.Dispose();
         _orders.Dispose();
         _books.Dispose();
+        _events.Dispose();
+        _stats.Dispose();
     }
 }

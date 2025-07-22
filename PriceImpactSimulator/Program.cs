@@ -31,7 +31,7 @@ var simParams = new MarketSimulator.SimParams(
     Seed:          42);
 
 
-var strategy = new NoOpStrategy(); 
+var strategy = new LadderBidStrategy();
 var runner   = new SimulationRunner(strategy, simParams, ctx, logFolder: "logs");
 
 runner.Run(TimeSpan.FromMinutes(1));

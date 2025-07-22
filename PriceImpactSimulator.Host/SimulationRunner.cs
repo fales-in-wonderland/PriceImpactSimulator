@@ -23,14 +23,20 @@ public sealed class SimulationRunner
         string logFolder)
     {
         _strategy = strategy;
-        _ctx = ctx;
+        _sink = new CsvSink(logFolder);
+        _ctx = new StrategyContext
+        {
+            TickSize = ctx.TickSize,
+            CapitalLimit = ctx.CapitalLimit,
+            SimulationStep = ctx.SimulationStep,
+            Logger = msg => { ctx.Logger(msg); _sink.LogEvent(msg); }
+        };
         _step = ctx.SimulationStep;
 
         _book = new OrderBook();
         _sim  = new MarketSimulator(_book, p);
-        _sink = new CsvSink(logFolder);
 
-        _strategy.Initialize(ctx);
+        _strategy.Initialize(_ctx);
     }
 
     public void Run(TimeSpan duration)
@@ -38,6 +44,7 @@ public sealed class SimulationRunner
         var now = DateTime.UtcNow;
         var end = now + duration;
         var nextBookDump = now;
+        var nextStats = now;
 
         while (now < end)
         {
@@ -45,8 +52,16 @@ public sealed class SimulationRunner
             var (execsBg, tradesBg, cancelsBg) = _sim.Step(now);
 
             foreach (var tr in tradesBg) _sink.LogTrade(tr);
-            foreach (var ex in execsBg) _sink.LogExec(ex);
-            foreach (var ex in cancelsBg) _sink.LogExec(ex);
+            foreach (var ex in execsBg)
+            {
+                _sink.LogExec(ex);
+                _strategy.OnExecution(ex);
+            }
+            foreach (var ex in cancelsBg)
+            {
+                _sink.LogExec(ex);
+                _strategy.OnExecution(ex);
+            }
 
             // книга → стратегия
             var snap = _book.Snapshot(now, depthLevels: 10);
@@ -56,6 +71,13 @@ public sealed class SimulationRunner
             {
                 _sink.LogBook(snap);
                 nextBookDump = now + TimeSpan.FromSeconds(10);
+            }
+
+            if (now >= nextStats && _strategy is IStrategyWithStats s)
+            {
+                var m = s.Metrics;
+                _sink.LogStats(now, m.BuyingPowerUsed, m.Position, m.Vwap, m.PnL);
+                nextStats = now + TimeSpan.FromSeconds(2);
             }
 
             // исполнение наших приказов
@@ -86,11 +108,18 @@ public sealed class SimulationRunner
                     order.Id, ExecType.New, order.Side,
                     order.Price,
                     0, cmd.Quantity, ts));
+                _strategy.OnExecution(new ExecutionReport(
+                    order.Id, ExecType.New, order.Side,
+                    order.Price, 0, cmd.Quantity, ts));
 
                 break;
 
             case CommandType.Cancel:
-                foreach (var ex in _book.Cancel(cmd.OrderId, ts)) _sink.LogExec(ex);
+                foreach (var ex in _book.Cancel(cmd.OrderId, ts))
+                {
+                    _sink.LogExec(ex);
+                    _strategy.OnExecution(ex);
+                }
                 break;
         }
     }
