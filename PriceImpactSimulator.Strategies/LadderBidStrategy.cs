@@ -44,7 +44,8 @@ public sealed class LadderBidStrategy : IStrategy, IStrategyWithStats
 
     public void OnExecution(in ExecutionReport report)
     {
-        var idx = _orders.FindIndex(o => o.id == report.OrderId);
+        var orderId = report.OrderId;
+        var idx = _orders.FindIndex(o => o.id == orderId);
         if (idx >= 0 && report.ExecType == ExecType.Trade && report.LastQty > 0)
         {
             int prevPos = _position;
