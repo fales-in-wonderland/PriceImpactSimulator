@@ -12,16 +12,17 @@ public sealed class LadderBidStrategy : IStrategy, IStrategyWithStats
     private DateTime _startTime;
     private readonly TimeSpan _delay = TimeSpan.FromSeconds(30);
 
-    private readonly List<(Guid id, decimal price)> _orders = new();
+    private readonly List<(Guid id, decimal price, int qty)> _orders = new();
 
     private decimal _lastBestBid;
     private decimal _lastMid;
 
     private int _position;
     private decimal _vwap;
+    private decimal _bpOrders;
 
     public StrategyMetrics Metrics => new(
-        BuyingPowerUsed: _position * _vwap,
+        BuyingPowerUsed: _bpOrders + _position * _vwap,
         Position: _position,
         Vwap: _position > 0 ? _vwap : 0m,
         PnL: _position * (_lastMid - (_position > 0 ? _vwap : 0m))
@@ -46,19 +47,34 @@ public sealed class LadderBidStrategy : IStrategy, IStrategyWithStats
     {
         var orderId = report.OrderId;
         var idx = _orders.FindIndex(o => o.id == orderId);
-        if (idx >= 0 && report.ExecType == ExecType.Trade && report.LastQty > 0)
+
+        if (idx >= 0 && report.ExecType == ExecType.New)
         {
+            var entry = _orders[idx];
+            _orders[idx] = (entry.id, entry.price, report.LeavesQty);
+        }
+        else if (idx >= 0 && report.ExecType == ExecType.Trade && report.LastQty > 0)
+        {
+            var entry = _orders[idx];
+            _bpOrders -= entry.price * report.LastQty;
+
             int prevPos = _position;
             _position += report.LastQty;
             _vwap = prevPos == 0
                 ? report.Price
                 : (_vwap * prevPos + report.Price * report.LastQty) / _position;
             _ctx.Logger($"Fill {report.LastQty} @ {report.Price:F2}; pos={_position}");
-            if (report.LeavesQty == 0)
+
+            var remaining = report.LeavesQty;
+            if (remaining == 0)
                 _orders.RemoveAt(idx);
+            else
+                _orders[idx] = (entry.id, entry.price, remaining);
         }
         else if (idx >= 0 && report.ExecType == ExecType.Cancel)
         {
+            var entry = _orders[idx];
+            _bpOrders -= entry.price * entry.qty;
             _orders.RemoveAt(idx);
             _ctx.Logger($"Canceled {report.OrderId}");
         }
@@ -90,14 +106,14 @@ public sealed class LadderBidStrategy : IStrategy, IStrategyWithStats
         const double lambda = 0.5;
         const int baseQty = 1000;
         var cmds = new List<OrderCommand>(levels);
-        _orders.Clear();
         for (int i = 0; i < levels; i++)
         {
             var price = startPrice - i * _ctx.TickSize;
             var qty = (int)Math.Round(baseQty * Math.Exp(-lambda * i));
             var id = Guid.NewGuid();
             cmds.Add(OrderCommand.New(id, Side.Buy, price, qty));
-            _orders.Add((id, price));
+            _orders.Add((id, price, qty));
+            _bpOrders += price * qty;
         }
         return cmds;
     }

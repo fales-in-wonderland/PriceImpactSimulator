@@ -33,16 +33,75 @@ public sealed class OrderBook
 
     #region Public API ------------------------------------------------------
 
-    public void AddLimit(Order order)
+    /// <summary>Adds a limit order with immediate matching if crossing.</summary>
+    public (IEnumerable<ExecutionReport> execs, IEnumerable<Trade> trades)
+        AddLimit(Order order, DateTime ts)
     {
-        var book = order.Side == Side.Buy ? _bids : _asks;
-        if (!book.TryGetValue(order.Price, out var q))
+        var execs = new List<ExecutionReport>();
+        var trades = new List<Trade>();
+
+        // try match against opposite book first
+        var opp = order.Side == Side.Buy ? _asks : _bids;
+        while (order.Quantity > 0 && opp.Count > 0)
         {
-            q = new Queue<Order>();
-            book[order.Price] = q;
+            var best = opp.Keys.First();
+            bool crosses = order.Side == Side.Buy
+                ? order.Price >= best
+                : order.Price <= best;
+            if (!crosses) break;
+
+            var q = opp[best];
+            while (q.Count > 0 && order.Quantity > 0)
+            {
+                var resting = q.Peek();
+                var execQty = int.Min(order.Quantity, resting.Quantity);
+
+                trades.Add(new Trade(ts, order.Side, best, execQty));
+
+                q.Dequeue();
+                if (resting.Quantity > execQty)
+                {
+                    q.Enqueue(resting with { Quantity = resting.Quantity - execQty });
+                }
+                else
+                {
+                    _index.Remove(resting.Id);
+                }
+
+                order = order with { Quantity = order.Quantity - execQty };
+
+                execs.Add(new ExecutionReport(
+                    resting.Id, ExecType.Trade, resting.Side,
+                    best,
+                    execQty, resting.Quantity - execQty, ts));
+
+                execs.Add(new ExecutionReport(
+                    order.Id, ExecType.Trade, order.Side,
+                    best,
+                    execQty, order.Quantity, ts));
+            }
+
+            if (q.Count == 0) opp.Remove(best);
         }
-        q.Enqueue(order);
-        _index[order.Id] = (order.Price, order.Side);
+
+        if (order.Quantity > 0)
+        {
+            var book = order.Side == Side.Buy ? _bids : _asks;
+            if (!book.TryGetValue(order.Price, out var q))
+            {
+                q = new Queue<Order>();
+                book[order.Price] = q;
+            }
+            q.Enqueue(order);
+            _index[order.Id] = (order.Price, order.Side);
+
+            execs.Add(new ExecutionReport(
+                order.Id, ExecType.New, order.Side,
+                order.Price,
+                0, order.Quantity, ts));
+        }
+
+        return (execs, trades);
     }
 
     public int QuantityAt(Side side, decimal price)

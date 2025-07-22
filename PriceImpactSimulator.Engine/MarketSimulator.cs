@@ -33,9 +33,9 @@ public sealed class MarketSimulator
             var bidPrice = _startMid - (lvl + 1) * _p.TickSize;
 
             _book.AddLimit(new Order(Guid.NewGuid(), DateTime.UtcNow,
-                Side.Sell, askPrice, vol, OrderType.Limit, null));
+                Side.Sell, askPrice, vol, OrderType.Limit, null), DateTime.UtcNow);
             _book.AddLimit(new Order(Guid.NewGuid(), DateTime.UtcNow,
-                Side.Buy, bidPrice, vol, OrderType.Limit, null));
+                Side.Buy, bidPrice, vol, OrderType.Limit, null), DateTime.UtcNow);
         }
     }
 
@@ -93,14 +93,10 @@ public sealed class MarketSimulator
 
 
             var order = new Order(Guid.NewGuid(), ts, side, price, qty, OrderType.Limit, null);
-            _book.AddLimit(order);
-            var newExec = new ExecutionReport(
-                order.Id, ExecType.New, side,
-                price,
-                0, qty, ts);
+            var (exs, trs) = _book.AddLimit(order, ts);
 
             UpdateMidHistory(ts);
-            return (new[] { newExec }, Array.Empty<Trade>(), cancelReports);
+            return (exs, trs, cancelReports);
         }
 
         // local helpers ----------
@@ -153,7 +149,7 @@ public sealed class MarketSimulator
         if (current < targetQty)
         {
             _book.AddLimit(new Order(Guid.NewGuid(), ts, side, price,
-                targetQty - current, OrderType.Limit, null));
+                targetQty - current, OrderType.Limit, null), ts);
             return;
         }
 
@@ -170,7 +166,7 @@ public sealed class MarketSimulator
             if (excess < 0)
             {
                 _book.AddLimit(new Order(Guid.NewGuid(), ts, side, price,
-                    -excess, OrderType.Limit, null));
+                    -excess, OrderType.Limit, null), ts);
             }
         }
     }

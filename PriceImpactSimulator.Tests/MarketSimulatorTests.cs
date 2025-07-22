@@ -30,8 +30,8 @@ public class MarketSimulatorTests
 
         for (int d = 0; d < 5; d++)
         {
-            book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Sell, 20.01m + d * 0.01m, 1000, OrderType.Limit, null));
-            book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Buy, 19.99m - d * 0.01m, 1000, OrderType.Limit, null));
+            book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Sell, 20.01m + d * 0.01m, 1000, OrderType.Limit, null), ts);
+            book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Buy, 19.99m - d * 0.01m, 1000, OrderType.Limit, null), ts);
         }
 
         var midBefore = book.Mid;
@@ -45,13 +45,13 @@ public class MarketSimulatorTests
         var book = new OrderBook();
         var ts = DateTime.UtcNow;
 
-        book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Buy, 19.95m, 100, OrderType.Limit, null));
-        book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Buy, 19.97m, 100, OrderType.Limit, null));
-        book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Buy, 19.96m, 100, OrderType.Limit, null));
+        book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Buy, 19.95m, 100, OrderType.Limit, null), ts);
+        book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Buy, 19.97m, 100, OrderType.Limit, null), ts);
+        book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Buy, 19.96m, 100, OrderType.Limit, null), ts);
 
-        book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Sell, 20.05m, 100, OrderType.Limit, null));
-        book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Sell, 20.02m, 100, OrderType.Limit, null));
-        book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Sell, 20.03m, 100, OrderType.Limit, null));
+        book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Sell, 20.05m, 100, OrderType.Limit, null), ts);
+        book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Sell, 20.02m, 100, OrderType.Limit, null), ts);
+        book.AddLimit(new Order(Guid.NewGuid(), ts, Side.Sell, 20.03m, 100, OrderType.Limit, null), ts);
 
         var snap = book.Snapshot(ts, 3);
 

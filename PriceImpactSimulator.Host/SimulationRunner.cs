@@ -103,15 +103,13 @@ public sealed class SimulationRunner
             case CommandType.New:
                 var order = new Order(cmd.OrderId, ts, cmd.Side, cmd.Price,
                                       cmd.Quantity, OrderType.Limit, null);
-                _book.AddLimit(order);
-                _sink.LogExec(new ExecutionReport(
-                    order.Id, ExecType.New, order.Side,
-                    order.Price,
-                    0, cmd.Quantity, ts));
-                _strategy.OnExecution(new ExecutionReport(
-                    order.Id, ExecType.New, order.Side,
-                    order.Price, 0, cmd.Quantity, ts));
-
+                var (execs, trades) = _book.AddLimit(order, ts);
+                foreach (var tr in trades) _sink.LogTrade(tr);
+                foreach (var ex in execs)
+                {
+                    _sink.LogExec(ex);
+                    _strategy.OnExecution(ex);
+                }
                 break;
 
             case CommandType.Cancel:
