@@ -35,19 +35,19 @@ var drip   = new DripFlipStrategy();
 
 var schedule = new[]
 {
-    new StrategyWindow(ladder,  10, 10),   
-    new StrategyWindow(drip,   30, 10),   
-    new StrategyWindow(ladder, 50, 10),   
-    new StrategyWindow(drip , 50, 10),    
+    new StrategyWindow(ladder,  30, 10),
+    new StrategyWindow(drip,   10, 10),
+    new StrategyWindow(ladder, 50, 10),
+    new StrategyWindow(drip , 50, 10),
 };
 
-var schedule = new[]
-{
-    new StrategyWindow(ladder,  20, 20),   
-    new StrategyWindow(drip,   60, 20),   
-    new StrategyWindow(ladder, 100, 20),   
-    new StrategyWindow(drip , 100, 20),    
-};
+//var schedule = new[]
+//{
+//    new StrategyWindow(ladder,  20, 20),
+//    new StrategyWindow(drip,   60, 20),
+//    new StrategyWindow(ladder, 100, 20),
+//    new StrategyWindow(drip , 100, 20),    
+//};
 
 var scheduler = new Scheduler(schedule);
 
@@ -55,6 +55,6 @@ var runner = new SimulationRunner(
     scheduler,
     simParams, ctx, "logs");
 
-runner.Run(TimeSpan.FromMinutes(3));
+runner.Run(TimeSpan.FromMinutes(1));
 
 Console.WriteLine("Simulation finished. CSV logs are in ./logs");

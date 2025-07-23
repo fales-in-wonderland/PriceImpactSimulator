@@ -10,7 +10,6 @@ public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
 {
     private StrategyContext _ctx = null!;
     private DateTime _startTime;
-    private readonly TimeSpan _delay = TimeSpan.FromSeconds(30);
 
     private readonly List<(Guid id, decimal price, int qty)> _orders = new();
 
@@ -32,7 +31,7 @@ public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
     {
         _ctx = ctx;
         _startTime = DateTime.UtcNow;
-        _ctx.Logger($"LadderBidStrategy initialized at {_startTime:O}");
+        _ctx.Logger($"LadderLiftStrategy initialized at {_startTime:O}");
     }
 
     public void OnOrderBook(in OrderBookSnapshot snapshot)
@@ -78,7 +77,6 @@ public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
             var entry = _orders[idx];
             _bpOrders -= entry.price * entry.qty;
             _orders.RemoveAt(idx);
-            _ctx.Logger($"Canceled {report.OrderId}");
         }
     }
 
@@ -91,7 +89,7 @@ public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
             return c;
         }
 
-        if (utcNow - _startTime < _delay || _lastBestBid == 0m)
+        if (_lastBestBid == 0m)
             return Array.Empty<OrderCommand>();
 
         if (_orders.Count == 0)
@@ -113,7 +111,7 @@ public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
         _ctx.Logger($"Placing ladder from {startPrice:F2}");
         const int levels = 5;
         const double lambda = 0.5;
-        const int baseQty = 3000;
+        const int baseQty = 10000;
         var cmds = new List<OrderCommand>(levels);
         for (int i = 0; i < levels; i++)
         {
