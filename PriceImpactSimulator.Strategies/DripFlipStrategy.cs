@@ -10,7 +10,7 @@ namespace PriceImpactSimulator.Strategies;
 /// 2. If best Bid ≥ VWAP + €0.05 **or** ≤ VWAP − €0.02, flattens entire position
 ///    with ONE market order (price = 0).  Buying‑power is reset.
 /// </summary>
-public sealed class DripAccumThenDumpStrategy : IStrategy, IStrategyWithStats
+public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
 {
     // ---- params ---------------------------------------------------------
     private const int SliceQty = 1; // per‑tick buy size

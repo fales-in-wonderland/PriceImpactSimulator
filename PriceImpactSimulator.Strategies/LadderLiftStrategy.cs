@@ -6,7 +6,7 @@ using PriceImpactSimulator.StrategyApi;
 
 namespace PriceImpactSimulator.Strategies;
 
-public sealed class LadderBidStrategy : IStrategy, IStrategyWithStats
+public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
 {
     private StrategyContext _ctx = null!;
     private DateTime _startTime;

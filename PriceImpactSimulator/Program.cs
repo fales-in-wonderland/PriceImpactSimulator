@@ -22,20 +22,39 @@ var simParams = new MarketSimulator.SimParams(
     TrendLookback: 20,
     PriceLookback: 20,
     K1Imbalance: 0.40,
-    K2Trend    : 0.25,
-    K3PriceDev : 0.15,
+    K2Trend    : 0.30,
+    K3PriceDev : 0.30,
     LambdaDepth:   0.15,
     Q0:            2500,
     LogNormMu:     7,
     LogNormSigma:  1.1,
     Seed:          42);
 
-//var strat1 = new LadderBidStrategy();
-var strat2 = new DripAccumThenDumpStrategy();
+var ladder = new LadderLiftStrategy();
+var drip   = new DripFlipStrategy();
 
-var runner = new SimulationRunner(strat2, simParams, ctx, "logs");
+var schedule = new[]
+{
+    new StrategyWindow(ladder,  10, 10),   
+    new StrategyWindow(drip,   30, 10),   
+    new StrategyWindow(ladder, 50, 10),   
+    new StrategyWindow(drip , 50, 10),    
+};
 
+var schedule = new[]
+{
+    new StrategyWindow(ladder,  20, 20),   
+    new StrategyWindow(drip,   60, 20),   
+    new StrategyWindow(ladder, 100, 20),   
+    new StrategyWindow(drip , 100, 20),    
+};
 
-runner.Run(TimeSpan.FromMinutes(1));
+var scheduler = new Scheduler(schedule);
+
+var runner = new SimulationRunner(
+    scheduler,
+    simParams, ctx, "logs");
+
+runner.Run(TimeSpan.FromMinutes(3));
 
 Console.WriteLine("Simulation finished. CSV logs are in ./logs");

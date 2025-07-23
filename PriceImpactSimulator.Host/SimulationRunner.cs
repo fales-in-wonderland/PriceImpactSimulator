@@ -9,12 +9,12 @@ namespace PriceImpactSimulator.Host;
 
 public sealed class SimulationRunner
 {
-    private readonly IStrategy        _strategy;
-    private readonly StrategyContext  _ctx;
-    private readonly MarketSimulator  _sim;
-    private readonly OrderBook        _book;
-    private readonly CsvSink          _sink;
-    private readonly TimeSpan         _step;
+    private readonly IStrategy _strategy;
+    private readonly StrategyContext _ctx;
+    private readonly MarketSimulator _sim;
+    private readonly OrderBook _book;
+    private readonly CsvSink _sink;
+    private readonly TimeSpan _step;
 
     public SimulationRunner(
         IStrategy strategy,
@@ -24,17 +24,27 @@ public sealed class SimulationRunner
     {
         _strategy = strategy;
         _sink = new CsvSink(logFolder);
+
+        if (strategy is Scheduler sch)
+        {
+            sch.AttachSink(_sink);
+        }
+
         _ctx = new StrategyContext
         {
             TickSize = ctx.TickSize,
             CapitalLimit = ctx.CapitalLimit,
             SimulationStep = ctx.SimulationStep,
-            Logger = msg => { ctx.Logger(msg); _sink.LogEvent(msg); }
+            Logger = msg =>
+            {
+                ctx.Logger(msg);
+                _sink.LogEvent(msg);
+            }
         };
         _step = ctx.SimulationStep;
 
         _book = new OrderBook();
-        _sim  = new MarketSimulator(_book, p);
+        _sim = new MarketSimulator(_book, p);
 
         _strategy.Initialize(_ctx);
     }
@@ -57,6 +67,7 @@ public sealed class SimulationRunner
                 _sink.LogExec(ex);
                 _strategy.OnExecution(ex);
             }
+
             foreach (var ex in cancelsBg)
             {
                 _sink.LogExec(ex);
@@ -70,14 +81,14 @@ public sealed class SimulationRunner
             if (now >= nextBookDump)
             {
                 _sink.LogBook(snap);
-                nextBookDump = now + TimeSpan.FromSeconds(2);
+                nextBookDump = now + TimeSpan.FromSeconds(1);
             }
 
             if (now >= nextStats && _strategy is IStrategyWithStats s)
             {
                 var m = s.Metrics;
                 _sink.LogStats(now, m.BuyingPowerUsed, m.Position, m.Vwap, m.PnL);
-                nextStats = now + TimeSpan.FromSeconds(2);
+                nextStats = now + TimeSpan.FromSeconds(1);
             }
 
             var cmds = _strategy.GenerateCommands(now);
@@ -96,7 +107,7 @@ public sealed class SimulationRunner
         {
             case CommandType.New:
                 var order = new Order(cmd.OrderId, ts, cmd.Side, cmd.Price,
-                                      cmd.Quantity, OrderType.Limit, null);
+                    cmd.Quantity, OrderType.Limit, null);
                 var (execs, trades) = _book.AddLimit(order, ts);
                 foreach (var tr in trades) _sink.LogTrade(tr);
                 foreach (var ex in execs)
@@ -104,6 +115,7 @@ public sealed class SimulationRunner
                     _sink.LogExec(ex);
                     _strategy.OnExecution(ex);
                 }
+
                 break;
 
             case CommandType.Cancel:
@@ -112,6 +124,7 @@ public sealed class SimulationRunner
                     _sink.LogExec(ex);
                     _strategy.OnExecution(ex);
                 }
+
                 break;
         }
     }

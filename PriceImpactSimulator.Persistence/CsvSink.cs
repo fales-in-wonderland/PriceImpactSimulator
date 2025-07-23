@@ -1,6 +1,4 @@
-﻿// File: CsvSink.cs
-
-using System;
+﻿using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -8,7 +6,6 @@ using PriceImpactSimulator.Domain;
 
 namespace PriceImpactSimulator.Persistence;
 
-/// <summary>Пишет события симуляции в CSV c меткой времени запуска.</summary>
 public sealed class CsvSink : IDisposable
 {
     private readonly StreamWriter _trades;
@@ -16,7 +13,8 @@ public sealed class CsvSink : IDisposable
     private readonly StreamWriter _books;
     private readonly StreamWriter _events;
     private readonly StreamWriter _stats;
-
+    private readonly StreamWriter _strEv;
+    
     public CsvSink(string folderUtc)
     {
         Directory.CreateDirectory(folderUtc);
@@ -33,6 +31,8 @@ public sealed class CsvSink : IDisposable
             "ts,message");
         _stats  = Create(Path.Combine(folderUtc, $"stats_{stamp}.csv"),
             "ts,buyPower,position,vwap,pnl");
+        _strEv = Create(Path.Combine(folderUtc,$"strategy_events_{stamp}.csv"),
+            "ts,strategy,event");
 
         static StreamWriter Create(string path, string header)
         {
@@ -72,7 +72,10 @@ public sealed class CsvSink : IDisposable
 
     public void LogStats(DateTime ts, decimal buyPower, int pos, decimal vwap, decimal pnl)
         => _stats.WriteLine($"{ts:O},{buyPower:F2},{pos},{vwap:F2},{pnl:F2}");
-
+    
+    public void LogStrategy(DateTime ts, string name, int onOff) =>
+        _strEv.WriteLine($"{ts:O},{name},{onOff}");
+    
     // ---------- housekeeping ----------
     public void Dispose()
     {
@@ -81,5 +84,6 @@ public sealed class CsvSink : IDisposable
         _books.Dispose();
         _events.Dispose();
         _stats.Dispose();
+        _strEv.Dispose(); 
     }
 }
