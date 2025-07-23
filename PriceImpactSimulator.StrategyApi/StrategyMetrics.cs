@@ -1,3 +1,4 @@
+// metrics record
 namespace PriceImpactSimulator.StrategyApi;
 
 public readonly record struct StrategyMetrics(

@@ -1,15 +1,16 @@
+// order book state
 ﻿using System.Collections.Generic;
 using PriceImpactSimulator.Domain;
 
 namespace PriceImpactSimulator.Engine;
 
-/// <summary>Простая книга заявок с ценовым шагом 0.01 €.</summary>
+
 public sealed class OrderBook
 {
     private readonly SortedDictionary<decimal, Queue<Order>> _bids =
-        new(new DescComparer());               // max‑price first
+        new(new DescComparer());               
     private readonly SortedDictionary<decimal, Queue<Order>> _asks =
-        new();                                 // min‑price first
+        new();                                 
 
     private readonly Dictionary<Guid, (decimal price, Side side)> _index = new();
 
@@ -31,9 +32,8 @@ public sealed class OrderBook
     internal SortedDictionary<decimal, Queue<Order>> AsksInternal => _asks;
 
 
-    #region Public API ------------------------------------------------------
 
-    /// <summary>Adds a limit order with immediate matching if crossing.</summary>
+    
     public (IEnumerable<ExecutionReport> execs, IEnumerable<Trade> trades)
         AddLimit(Order order, DateTime ts)
     {
@@ -43,7 +43,7 @@ public sealed class OrderBook
         var execs = new List<ExecutionReport>();
         var trades = new List<Trade>();
 
-        // try match against opposite book first
+        
         var opp = order.Side == Side.Buy ? _asks : _bids;
         while (order.Quantity > 0 && opp.Count > 0)
         {
@@ -107,7 +107,7 @@ public sealed class OrderBook
         return (execs, trades);
     }
 
-    // --- NEW helper ----------------------------------------------------------
+    
     private (IEnumerable<ExecutionReport> execs, IEnumerable<Trade> trades)
         ExecuteMarketAggressor(Order aggressor, DateTime ts)
     {
@@ -132,14 +132,14 @@ public sealed class OrderBook
 
                 trades.Add(new Trade(ts, side, price, execQty));
 
-                // report for resting
+                
                 execs.Add(new ExecutionReport(resting.Id, ExecType.Trade, resting.Side,
                     price, execQty, leavesRs, ts));
-                // report for aggressor  ←–– ЭТОГО РАНЬШЕ НЕ БЫЛО
+                
                 execs.Add(new ExecutionReport(aggressor.Id, ExecType.Trade, aggressor.Side,
                     price, execQty, leavesAg, ts));
 
-                // book maintenance
+                
                 queue.Dequeue();
                 if (leavesRs > 0) queue.Enqueue(resting with { Quantity = leavesRs });
                 else              _index.Remove(resting.Id);
@@ -167,7 +167,7 @@ public sealed class OrderBook
     public IEnumerable<ExecutionReport> Cancel(Guid orderId, DateTime ts)
     {
         if (!_index.TryGetValue(orderId, out var meta))
-            yield break;                                // nothing to cancel
+            yield break;                                
 
         var (price, side) = meta;
         var book = side == Side.Buy ? _bids : _asks;
@@ -190,7 +190,7 @@ public sealed class OrderBook
         else book[price] = kept;
     }
 
-    /// <summary>Исполняет market‑ордер и (опционально) возвращает отчёты.</summary>
+    
     public (IEnumerable<ExecutionReport> execs, IEnumerable<Trade> trades)
         ExecuteMarket(Side side, int qty, DateTime ts)
     {
@@ -208,7 +208,7 @@ public sealed class OrderBook
                 var resting = queue.Peek();
                 var execQty = int.Min(qty, resting.Quantity);
 
-                // агрессор не имеет собственного OrderId (симуляционный рынок)
+                
                 trades.Add(new Trade(ts, side, price, execQty));
 
                 queue.Dequeue();
@@ -255,7 +255,6 @@ public sealed class OrderBook
         };
     }
 
-    #endregion
 
     private sealed class DescComparer : IComparer<decimal>
     {

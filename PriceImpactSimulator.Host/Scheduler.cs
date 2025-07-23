@@ -1,4 +1,5 @@
-﻿// Host/Scheduler.cs
+// strategy scheduler
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -9,25 +10,25 @@ using PriceImpactSimulator.StrategyApi;
 
 namespace PriceImpactSimulator.Host;
 
-/// <summary>
-/// Turns individual strategies ON / OFF according to a simple
-/// “window” schedule measured in **simulation seconds**  
-/// (i.e. time‑stamps coming from the engine).
-/// All state transitions are logged into <c>strategy_events_*.csv</c>
-/// as 0 = OFF, 1 = ON.
-/// </summary>
+
+
+
+
+
+
+
 public sealed class Scheduler : IStrategy, IStrategyWithStats
 {
-    // --------------------------------------------------------------------
+    
     private readonly List<(double on, double off, IStrategy strat)> _win = new();
 
     private CsvSink? _sink;
     private StrategyContext _ctx = null!;
-    private DateTime _t0; // simulation time origin
+    private DateTime _t0; 
     private bool _t0Set = false;
-    private double _lastSec; // latest sim‑second seen
+    private double _lastSec; 
 
-    // --------------------------------------------------------------------
+    
     public Scheduler(IEnumerable<StrategyWindow> windows)
     {
         foreach (var w in windows)
@@ -36,7 +37,7 @@ public sealed class Scheduler : IStrategy, IStrategyWithStats
 
     public void AttachSink(CsvSink sink) => _sink = sink;
 
-    // ===== helpers =======================================================
+    
     private void TouchOrigin(DateTime ts)
     {
         if (_t0Set) return;
@@ -51,7 +52,7 @@ public sealed class Scheduler : IStrategy, IStrategyWithStats
     private bool Live(IStrategy s, double t)
         => _win.Any(w => w.strat == s && InRange(t, w.on, w.off));
 
-    // ===== IStrategy implementation ======================================
+    
     public void Initialize(in StrategyContext ctx)
     {
         _ctx = ctx;
@@ -93,7 +94,7 @@ public sealed class Scheduler : IStrategy, IStrategyWithStats
             bool was = Live(s, t - dt);
             bool now = Live(s, t);
 
-            // log state change
+            
             if (was != now && _sink is not null)
                 _sink.LogStrategy(utcNow, s.GetType().Name, now ? 1 : 0);
 
@@ -104,7 +105,7 @@ public sealed class Scheduler : IStrategy, IStrategyWithStats
         return cmds;
     }
 
-    // ===== aggregated metrics of *currently live* strategies =============
+    
     public StrategyMetrics Metrics
     {
         get

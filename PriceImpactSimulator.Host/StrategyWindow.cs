@@ -1,3 +1,4 @@
+// strategy activation window
 ﻿using PriceImpactSimulator.StrategyApi;
 
 namespace PriceImpactSimulator.Host;

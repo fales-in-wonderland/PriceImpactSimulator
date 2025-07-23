@@ -1,3 +1,4 @@
+// market simulator
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,7 +6,7 @@ using PriceImpactSimulator.Domain;
 
 namespace PriceImpactSimulator.Engine;
 
-/// <summary>Генерирует фоновые заявки + случайные отмены строго по утверждённым правилам.</summary>
+
 public sealed class MarketSimulator
 {
     private readonly OrderBook _book;
@@ -14,8 +15,8 @@ public sealed class MarketSimulator
     private readonly decimal _startMid;
     private readonly HashSet<Guid> _houseLiquidity = new();
 
-    private readonly Queue<Trade> _recentTrades = new(); // last N trades
-    private readonly Queue<decimal> _midHistory = new(); // last N mids
+    private readonly Queue<Trade> _recentTrades = new(); 
+    private readonly Queue<decimal> _midHistory = new(); 
 
     public MarketSimulator(OrderBook book, SimParams p)
     {
@@ -40,7 +41,7 @@ public sealed class MarketSimulator
 
     public IReadOnlyCollection<Trade> RecentTrades => _recentTrades.ToList();
 
-// Engine/MarketSimulator.cs  (внутри класса, заменяем record SimParams)
+
 
     public record SimParams(
         decimal TickSize,
@@ -58,7 +59,7 @@ public sealed class MarketSimulator
         int Seed);
 
 
-    /// <summary>Выполняет один 100‑мс «тик» симуляции.</summary>
+    
     public (IEnumerable<ExecutionReport> execs,
         IEnumerable<Trade> trades,
         IEnumerable<ExecutionReport> cancels)
@@ -66,10 +67,10 @@ public sealed class MarketSimulator
     {
         EnsureLiquidity(ts);
 
-        // 1. случайные отмены
+        
         var cancelReports = CancelRandom(ts);
 
-        // 2. сгенерировать новую заявку
+        
         var (pbuy, dirSide) = CalcDirectionProb();
         var side = _rng.NextDouble() < pbuy ? Side.Buy : Side.Sell;
 
@@ -98,10 +99,10 @@ public sealed class MarketSimulator
             return (exs, trs, cancelReports);
         }
 
-        // local helpers ----------
+        
         double RandomNormal(double mu, double sigma)
         {
-            // Box‑Muller
+            
             var u1 = 1.0 - _rng.NextDouble();
             var u2 = 1.0 - _rng.NextDouble();
             var randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
@@ -110,13 +111,13 @@ public sealed class MarketSimulator
         }
     }
 
-    // ---------- helpers ----------------------------------------------------
+    
     private void EnsureLiquidity(DateTime ts)
     {
         decimal mid = _book.Mid ?? _startMid;
         const int Depth = 10;
 
-        // Keep a list of simulator orders that SHOULD remain after this tick
+        
         var keep = new HashSet<Guid>();
 
         for (int lvl = 0; lvl < Depth; lvl++)
@@ -129,7 +130,7 @@ public sealed class MarketSimulator
             keep.UnionWith(AdjustLevel(Side.Sell, askPrice, target, ts));
         }
 
-        // Kill any *old* house order that is no longer in the ±Depth band
+        
         foreach (var id in _houseLiquidity.Except(keep).ToArray())
         {
             _book.Cancel(id, ts).ToList();
@@ -139,14 +140,14 @@ public sealed class MarketSimulator
 
     private IEnumerable<Guid> AdjustLevel(Side side, decimal price, int targetQty, DateTime ts)
     {
-        // Split existing volume into house vs. user
+        
         var allAtPrice   = _book.OrdersAtPrice(side, price);
         int houseQty     = allAtPrice.Where(o => _houseLiquidity.Contains(o.Id))
             .Sum(o => o.Quantity);
         int delta        = targetQty - houseQty;
         var idsToKeep    = new List<Guid>();
 
-        // Top‑up if we’re short
+        
         if (delta > 0)
         {
             var id = Guid.NewGuid();
@@ -157,7 +158,7 @@ public sealed class MarketSimulator
             idsToKeep.Add(id);
         }
 
-        // Trim if we’re long
+        
         if (delta < 0)
         {
             int excess = -delta;
@@ -171,7 +172,7 @@ public sealed class MarketSimulator
             }
         }
 
-        // Return IDs that should survive this tick (for global keep‑set)
+        
         idsToKeep.AddRange(allAtPrice.Where(o => _houseLiquidity.Contains(o.Id))
             .Select(o => o.Id));
         return idsToKeep;
@@ -179,24 +180,24 @@ public sealed class MarketSimulator
 
     private (double pBuy, Side biasDir) CalcDirectionProb()
     {
-        // (a) book imbalance
+        
         var bidQty = _book.Snapshot(DateTime.MinValue, 3).Bids.Sum(l => l.Quantity);
         var askQty = _book.Snapshot(DateTime.MinValue, 3).Asks.Sum(l => l.Quantity);
         var imb = (double)(bidQty - askQty) / Math.Max(1, bidQty + askQty);
 
-        // (b) trade trend
+        
         var buys = _recentTrades.Count(t => t.AggressorSide == Side.Buy);
         var sells = _recentTrades.Count - buys;
         var trend = (_recentTrades.Count == 0) ? 0.0 : (double)(buys - sells) / _recentTrades.Count;
 
-        // (c) price deviation
+        
         var priceDevTicks = (_book.Mid ?? _startMid) - _startMid;
         var priceDev = (double)(priceDevTicks / _p.TickSize);
 
         if (_midHistory.Count == _p.PriceLookback)
         {
             var first = _midHistory.Peek();
-            priceDev = (double)((_book.Mid - first) / _p.TickSize) * 0.01; // normalised per tick
+            priceDev = (double)((_book.Mid - first) / _p.TickSize) * 0.01; 
         }
 
         var pBuy = 0.5 + _p.K1Imbalance * imb + _p.K2Trend * trend - _p.K3PriceDev * priceDev;

@@ -1,4 +1,5 @@
-﻿// File: CommandType.cs
+// command type
+﻿
 namespace PriceImpactSimulator.StrategyApi;
 
 public enum CommandType { New, Cancel }
