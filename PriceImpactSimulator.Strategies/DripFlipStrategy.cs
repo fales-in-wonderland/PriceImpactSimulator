@@ -16,7 +16,6 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
     private const int SliceQty = 1; // per‑tick buy size
     private const decimal TakeProf = 0.05m; // +5 cts over VWAP
     private const decimal StopLoss = 0.02m; // −2 cts under VWAP
-    private static readonly TimeSpan StartDelay = TimeSpan.FromSeconds(10);
 
     // ---- runtime state --------------------------------------------------
     private StrategyContext _ctx = null!;
@@ -40,7 +39,7 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
     {
         _ctx = ctx;
         _start = DateTime.UtcNow;
-        _ctx.Logger("DripAccumThenDumpStrategy armed; will start after 40 s.");
+        _ctx.Logger("DripFlipStrategy ready.");
     }
 
     public void OnOrderBook(in OrderBookSnapshot snap)
@@ -76,9 +75,6 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
 
     public IReadOnlyList<OrderCommand> GenerateCommands(DateTime nowUtc)
     {
-        // Not started yet?
-        if (nowUtc - _start < StartDelay) return Array.Empty<OrderCommand>();
-
         // 1) Check flatten conditions
         if (_position > 0 &&
             (_lastBestBid >= _vwap + TakeProf || _lastBestBid <= _vwap - StopLoss))
