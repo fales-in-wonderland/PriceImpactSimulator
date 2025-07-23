@@ -1,10 +1,11 @@
+// simulation entry
 ﻿using System;
 using PriceImpactSimulator.Host;
 using PriceImpactSimulator.StrategyApi;
 using PriceImpactSimulator.Strategies;
 using PriceImpactSimulator.Engine;
 
-// simulation tick aligned with README specification
+
 var step = TimeSpan.FromMilliseconds(10);
 
 var ctx = new StrategyContext

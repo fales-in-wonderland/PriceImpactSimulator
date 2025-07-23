@@ -1,3 +1,4 @@
+// simple drip strategy
 ﻿using System;
 using System.Collections.Generic;
 using PriceImpactSimulator.Domain;
@@ -5,29 +6,29 @@ using PriceImpactSimulator.StrategyApi;
 
 namespace PriceImpactSimulator.Strategies;
 
-/// <summary>
-/// 1. After a 40‑sec warm‑up, buys a tiny slice at market every tick.
-/// 2. If best Bid ≥ VWAP + €0.05 **or** ≤ VWAP − €0.02, flattens entire position
-///    with ONE market order (price = 0).  Buying‑power is reset.
-/// </summary>
+
+
+
+
+
 public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
 {
-    // ---- params ---------------------------------------------------------
-    private const int SliceQty = 1; // per‑tick buy size
-    private const decimal TakeProf = 0.05m; // +5 cts over VWAP
-    private const decimal StopLoss = 0.02m; // −2 cts under VWAP
+    
+    private const int SliceQty = 1; 
+    private const decimal TakeProf = 0.05m; 
+    private const decimal StopLoss = 0.02m; 
     private static readonly TimeSpan StartDelay = TimeSpan.FromSeconds(10);
 
-    // ---- runtime state --------------------------------------------------
+    
     private StrategyContext _ctx = null!;
     private DateTime _start;
     private int _position;
-    private decimal _vwap; // running volume‑weighted average buy price
+    private decimal _vwap; 
     private decimal _lastBestBid;
     private decimal _realised;
     private readonly HashSet<Guid> _myOrders = new();
 
-    // ---- metrics exposure ----------------------------------------------
+    
     public StrategyMetrics Metrics => new(
         BuyingPowerUsed: _position * _vwap,
         Position: _position,
@@ -35,7 +36,7 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
         PnL: _realised + _position * (_lastBestBid - _vwap),
         RealisedPnL: _realised);
 
-    // --------------------------------------------------------------------
+    
     public void Initialize(in StrategyContext ctx)
     {
         _ctx = ctx;
@@ -76,20 +77,20 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
 
     public IReadOnlyList<OrderCommand> GenerateCommands(DateTime nowUtc)
     {
-        // Not started yet?
+        
         if (nowUtc - _start < StartDelay) return Array.Empty<OrderCommand>();
 
-        // 1) Check flatten conditions
+        
         if (_position > 0 &&
             (_lastBestBid >= _vwap + TakeProf || _lastBestBid <= _vwap - StopLoss))
         {
             _ctx.Logger($"Flattening {_position} @ market (bid={_lastBestBid:F2}, vwap={_vwap:F2})");
             var id = Guid.NewGuid();
             _myOrders.Add(id);
-            return new[] { OrderCommand.New(id, Side.Sell, 0m, _position) }; // price 0 ⇒ market
+            return new[] { OrderCommand.New(id, Side.Sell, 0m, _position) }; 
         }
 
-        // 2) Otherwise, drip‑buy a small slice each tick
+        
         var buyId = Guid.NewGuid();
         _myOrders.Add(buyId);
         return new[] { OrderCommand.New(buyId, Side.Buy, 0m, SliceQty) };

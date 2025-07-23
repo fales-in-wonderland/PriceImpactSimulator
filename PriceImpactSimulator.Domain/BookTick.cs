@@ -1,4 +1,4 @@
-﻿// Domain/BookTick.cs
+// book mid-price tick
 namespace PriceImpactSimulator.Domain;
 
 public sealed record BookTick

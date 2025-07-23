@@ -1,3 +1,4 @@
+// csv log writer
 ﻿using System;
 using System.Globalization;
 using System.IO;
@@ -42,7 +43,7 @@ public sealed class CsvSink : IDisposable
         }
     }
 
-    // ---------- API -------------------------------------------------------
+    
 
     public void LogTrade(in Trade t) =>
         _trades.WriteLine($"{t.Timestamp:O},{t.AggressorSide},{t.Price:F2},{t.Quantity}");
@@ -76,7 +77,7 @@ public sealed class CsvSink : IDisposable
     public void LogStrategy(DateTime ts, string name, int onOff) =>
         _strEv.WriteLine($"{ts:O},{name},{onOff}");
     
-    // ---------- housekeeping ----------
+    
     public void Dispose()
     {
         _trades.Dispose();

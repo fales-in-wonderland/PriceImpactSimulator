@@ -1,3 +1,4 @@
+// unit tests
 ﻿using PriceImpactSimulator.Domain;
 using PriceImpactSimulator.Engine;
 using Xunit;

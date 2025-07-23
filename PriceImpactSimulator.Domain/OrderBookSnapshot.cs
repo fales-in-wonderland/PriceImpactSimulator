@@ -1,7 +1,8 @@
-﻿// File: OrderBookSnapshot.cs
+// order book snapshot
+﻿
 namespace PriceImpactSimulator.Domain;
 
-/// <summary>Compact depth view used by strategies (best N levels each side).</summary>
+
 public readonly struct OrderBookLevel
 {
     public OrderBookLevel(decimal price, int qty)
@@ -13,6 +14,6 @@ public readonly struct OrderBookLevel
 public sealed class OrderBookSnapshot
 {
     public required DateTime Timestamp { get; init; }
-    public required OrderBookLevel[] Bids { get; init; }   // descending price
-    public required OrderBookLevel[] Asks { get; init; }   // ascending price
+    public required OrderBookLevel[] Bids { get; init; }   
+    public required OrderBookLevel[] Asks { get; init; }   
 }

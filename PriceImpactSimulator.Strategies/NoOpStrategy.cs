@@ -1,4 +1,5 @@
-﻿// File: NoOpStrategy.cs
+// empty strategy
+﻿
 using System;
 using System.Collections.Generic;
 using PriceImpactSimulator.Domain;

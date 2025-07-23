@@ -1,3 +1,4 @@
+// simulation runner
 ﻿using System;
 using System.Threading;
 using PriceImpactSimulator.Domain;
@@ -58,7 +59,7 @@ public sealed class SimulationRunner
 
         while (now < end)
         {
-            // шаг фонового рынка
+            
             var (execsBg, tradesBg, cancelsBg) = _sim.Step(now);
 
             foreach (var tr in tradesBg) _sink.LogTrade(tr);
@@ -74,7 +75,7 @@ public sealed class SimulationRunner
                 _strategy.OnExecution(ex);
             }
 
-            // книга → стратегия
+            
             var snap = _book.Snapshot(now, depthLevels: 10);
             _strategy.OnOrderBook(snap);
 

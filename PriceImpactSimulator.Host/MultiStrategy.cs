@@ -1,3 +1,4 @@
+// runs multiple strategies together
 ﻿using PriceImpactSimulator.Domain;
 using PriceImpactSimulator.StrategyApi;
 

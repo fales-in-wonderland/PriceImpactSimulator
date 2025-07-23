@@ -1,8 +1,9 @@
+// order command
 ﻿using PriceImpactSimulator.Domain;
 
 namespace PriceImpactSimulator.StrategyApi;
 
-/// <summary>Instruction returned by a strategy, to be consumed by the engine.</summary>
+
 public sealed record OrderCommand
 (
     CommandType Type,

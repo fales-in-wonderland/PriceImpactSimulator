@@ -1,3 +1,4 @@
+// stats extension
 namespace PriceImpactSimulator.StrategyApi;
 
 public interface IStrategyWithStats : IStrategy
