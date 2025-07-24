@@ -1,9 +1,9 @@
-﻿// File: StrategyContext.cs
+
 using System;
 
 namespace PriceImpactSimulator.StrategyApi;
 
-/// <summary>Read‑only environment info exposed to a strategy at runtime.</summary>
+// Read-only runtime info for strategies
 public sealed class StrategyContext
 {
     public required decimal   TickSize          { get; init; }
