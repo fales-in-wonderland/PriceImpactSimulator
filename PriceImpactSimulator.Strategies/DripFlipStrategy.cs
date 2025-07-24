@@ -5,28 +5,23 @@ using PriceImpactSimulator.StrategyApi;
 
 namespace PriceImpactSimulator.Strategies;
 
-/// <summary>
-/// «Капельный» набор позиции + единоразовый сброс:
-/// • каждый тик покупаем SliceQty маркет‑лотов
-/// • если bid ≥ VWAP+0.05 €  ИЛИ  ≤ VWAP−0.02 €  — сбрасываем всё маркетом
-/// Учёт PnL ведётся ТОЛЬКО по собственным ордерам.
-/// </summary>
+// Buys in small slices and exits on profit or loss
 public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
 {
-    // — параметры —
+    // parameters
     private const int     SliceQty  = 1;
     private const decimal TakeProf  = 0.10m;
     private const decimal StopLoss  = 0.05m;
 
-    // — состояние —
+    // state
     private StrategyContext      _ctx = null!;
     private int                  _pos;
     private decimal              _vwap;
-    private decimal              _bid;        // последний лучш. bid
+    private decimal              _bid;
     private decimal              _realised;
-    private readonly HashSet<Guid> _liveIds = new();   // активные мои ордера
+    private readonly HashSet<Guid> _liveIds = new();
 
-    // — публичные метрики —
+    // public metrics
     public StrategyMetrics Metrics => new(
         BuyingPowerUsed : _pos * _vwap,
         Position        : _pos,
@@ -34,7 +29,7 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
         PnL             : _realised + _pos * (_bid - _vwap),
         RealisedPnL     : _realised);
 
-    // ------------ IStrategy plumbing ------------------------------------
+    // IStrategy implementation
     public void Initialize(in StrategyContext ctx)
     {
         _ctx = ctx;
@@ -49,10 +44,10 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
 
     public void OnExecution(in ExecutionReport rep)
     {
-        // фильтруем только МОИ отчёты
+        // ignore reports for other orders
         if (!_liveIds.Remove(rep.OrderId)) return;
 
-        // если ордер не полностью исполнен — оставляем ID в трекинге
+        // keep id if partially filled
         if (rep.LeavesQty > 0 && rep.ExecType != ExecType.Cancel)
             _liveIds.Add(rep.OrderId);
 
@@ -66,12 +61,12 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
                 ? rep.Price
                 : (_vwap * prev + rep.Price * rep.LastQty) / _pos;
         }
-        else // Sell
+        else // sell
         {
             _realised += rep.LastQty * (rep.Price - _vwap);
             _pos      -= rep.LastQty;
 
-            if (_pos <= 0)          // полностью вышли — сброс VWAP
+            if (_pos <= 0)
             {
                 _pos  = 0;
                 _vwap = 0m;
@@ -81,7 +76,7 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
 
     public IReadOnlyList<OrderCommand> GenerateCommands(DateTime nowUtc)
     {
-        // ---- 1) flatten? -------------------------------------------------
+        // close position if target met
         if (_pos > 0 &&
             (_bid >= _vwap + TakeProf || _bid <= _vwap - StopLoss))
         {
@@ -91,7 +86,7 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
             return new[] { OrderCommand.New(id, Side.Sell, 0m, _pos) };
         }
 
-        // ---- 2) drip‑buy slice ------------------------------------------
+        // otherwise buy next slice
         var buyId = Guid.NewGuid();
         _liveIds.Add(buyId);
         return new[] { OrderCommand.New(buyId, Side.Buy, 0m, SliceQty) };
