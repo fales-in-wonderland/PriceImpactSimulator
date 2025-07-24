@@ -12,4 +12,8 @@
       <ProjectReference Include="..\PriceImpactSimulator.Strategies\PriceImpactSimulator.Strategies.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="results\" />
+    </ItemGroup>
+
 </Project>
