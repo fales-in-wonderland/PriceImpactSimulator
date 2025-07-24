@@ -7,4 +7,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\PriceImpactSimulator.Host\PriceImpactSimulator.Host.csproj" />
+      <ProjectReference Include="..\PriceImpactSimulator.Strategies\PriceImpactSimulator.Strategies.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="results\" />
+    </ItemGroup>
+
 </Project>
