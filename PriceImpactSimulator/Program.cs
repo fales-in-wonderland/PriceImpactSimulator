@@ -18,16 +18,16 @@ var simParams = new MarketSimulator.SimParams(
     TickSize:      0.01m,
     StartMidPrice: 20.00m,
     CancelProb:    0.005,
-    TrendLookback: 100,
+    TrendLookback: 50,
     PriceLookback: 2,
     K1Imbalance: 0.15,
-    K2Trend    : 0.40,
-    K3PriceDev : 1.80,
+    K2Trend    : 0.35,
+    K3PriceDev : 2.50,
     LambdaDepth:   0.15,
     Q0:            2500,
     LogNormMu:     7,
     LogNormSigma:  1.1,
-    Seed:          9);
+    Seed:          71);
 var ladder = new LadderLiftStrategy();
 var drip   = new DripFlipStrategy();
 

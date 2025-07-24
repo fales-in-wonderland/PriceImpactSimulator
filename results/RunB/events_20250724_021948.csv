@@ -1,0 +1,980 @@
+﻿ts,message
+2025-07-24T02:19:48.9145475Z,DripFlipStrategy ready.
+2025-07-24T02:19:48.9154651Z,LadderLiftStrategy initialized at 2025-07-24T02:19:48.9154054Z
+2025-07-24T02:20:34.6728990Z,Flattening 927 @ market (bid=20.13, vwap=20.19)
+2025-07-24T02:20:34.8763144Z,Flattening 12 @ market (bid=20.10, vwap=20.15)
+2025-07-24T02:20:36.1840210Z,Flattening 83 @ market (bid=20.06, vwap=20.11)
+2025-07-24T02:20:36.5749052Z,Flattening 24 @ market (bid=20.00, vwap=20.06)
+2025-07-24T02:20:37.3693000Z,Flattening 50 @ market (bid=19.96, vwap=20.01)
+2025-07-24T02:20:38.3209725Z,Flattening 60 @ market (bid=19.92, vwap=19.97)
+2025-07-24T02:20:44.6772338Z,Flattening 406 @ market (bid=20.08, vwap=19.98)
+2025-07-24T02:21:53.9843108Z,Placing ladder from 20.36
+2025-07-24T02:21:54.4050954Z,Shifting ladder up to start 20.37
+2025-07-24T02:21:54.4069399Z,Placing ladder from 20.37
+2025-07-24T02:21:54.7028016Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:54.7183489Z,Placing ladder from 20.36
+2025-07-24T02:21:54.8120055Z,Shifting ladder up to start 20.37
+2025-07-24T02:21:54.8122613Z,Placing ladder from 20.37
+2025-07-24T02:21:54.8271633Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:54.8434266Z,Placing ladder from 20.36
+2025-07-24T02:21:55.2688469Z,Shifting ladder up to start 20.37
+2025-07-24T02:21:55.2690963Z,Placing ladder from 20.37
+2025-07-24T02:21:55.3466849Z,Shifting ladder down to start 20.36
+2025-07-24T02:21:55.3468632Z,Placing ladder from 20.36
+2025-07-24T02:21:55.4094569Z,Shifting ladder up to start 20.36
+2025-07-24T02:21:55.4096369Z,Placing ladder from 20.36
+2025-07-24T02:21:55.4710949Z,Shifting ladder up to start 20.37
+2025-07-24T02:21:55.4712534Z,Placing ladder from 20.37
+2025-07-24T02:21:55.5498769Z,Shifting ladder up to start 20.38
+2025-07-24T02:21:55.5499666Z,Placing ladder from 20.38
+2025-07-24T02:21:55.7052231Z,Shifting ladder down to start 20.37
+2025-07-24T02:21:55.7053727Z,Placing ladder from 20.37
+2025-07-24T02:21:55.7833859Z,Shifting ladder up to start 20.38
+2025-07-24T02:21:55.7835956Z,Placing ladder from 20.38
+2025-07-24T02:21:55.9259773Z,Shifting ladder up to start 20.38
+2025-07-24T02:21:55.9261077Z,Placing ladder from 20.38
+2025-07-24T02:21:56.0188729Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:56.0343687Z,Placing ladder from 20.37
+2025-07-24T02:21:56.0654879Z,Shifting ladder up to start 20.38
+2025-07-24T02:21:56.0656309Z,Placing ladder from 20.38
+2025-07-24T02:21:56.0962527Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:56.1115919Z,Placing ladder from 20.36
+2025-07-24T02:21:56.1265665Z,Shifting ladder up to start 20.37
+2025-07-24T02:21:56.1266797Z,Placing ladder from 20.37
+2025-07-24T02:21:56.1729509Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:56.1885383Z,Placing ladder from 20.36
+2025-07-24T02:21:56.3442654Z,Shifting ladder up to start 20.37
+2025-07-24T02:21:56.3444075Z,Placing ladder from 20.37
+2025-07-24T02:21:56.4853912Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:56.5011352Z,Placing ladder from 20.36
+2025-07-24T02:21:56.5474273Z,Shifting ladder up to start 20.37
+2025-07-24T02:21:56.5474721Z,Placing ladder from 20.37
+2025-07-24T02:21:56.6102626Z,Shifting ladder up to start 20.38
+2025-07-24T02:21:56.6103649Z,Placing ladder from 20.38
+2025-07-24T02:21:56.6261671Z,Shifting ladder up to start 20.39
+2025-07-24T02:21:56.6262444Z,Placing ladder from 20.39
+2025-07-24T02:21:56.6568219Z,Shifting ladder down to start 20.38
+2025-07-24T02:21:56.6570112Z,Placing ladder from 20.38
+2025-07-24T02:21:56.7358301Z,Shifting ladder up to start 20.39
+2025-07-24T02:21:56.7360729Z,Placing ladder from 20.39
+2025-07-24T02:21:56.7992120Z,Shifting ladder up to start 20.40
+2025-07-24T02:21:56.7992705Z,Placing ladder from 20.40
+2025-07-24T02:21:56.8467428Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:56.8623939Z,Placing ladder from 20.39
+2025-07-24T02:21:56.8780000Z,Shifting ladder up to start 20.40
+2025-07-24T02:21:56.8780714Z,Placing ladder from 20.40
+2025-07-24T02:21:57.0492482Z,Shifting ladder up to start 20.41
+2025-07-24T02:21:57.0495978Z,Placing ladder from 20.41
+2025-07-24T02:21:57.0646844Z,Shifting ladder down to start 20.40
+2025-07-24T02:21:57.0648212Z,Placing ladder from 20.40
+2025-07-24T02:21:57.0799197Z,Shifting ladder up to start 20.41
+2025-07-24T02:21:57.0799755Z,Placing ladder from 20.41
+2025-07-24T02:21:57.1112298Z,Shifting ladder up to start 20.42
+2025-07-24T02:21:57.1114558Z,Placing ladder from 20.42
+2025-07-24T02:21:57.1580068Z,Shifting ladder up to start 20.43
+2025-07-24T02:21:57.1581794Z,Placing ladder from 20.43
+2025-07-24T02:21:57.3005548Z,Shifting ladder up to start 20.44
+2025-07-24T02:21:57.3006341Z,Placing ladder from 20.44
+2025-07-24T02:21:57.3168220Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:57.3322413Z,Placing ladder from 20.43
+2025-07-24T02:21:57.3630187Z,Shifting ladder up to start 20.44
+2025-07-24T02:21:57.3630820Z,Placing ladder from 20.44
+2025-07-24T02:21:57.6439475Z,Shifting ladder up to start 20.45
+2025-07-24T02:21:57.6441339Z,Placing ladder from 20.45
+2025-07-24T02:21:57.7241177Z,Shifting ladder up to start 20.46
+2025-07-24T02:21:57.7243156Z,Placing ladder from 20.46
+2025-07-24T02:21:57.8165290Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:57.8325101Z,Placing ladder from 20.46
+2025-07-24T02:21:57.8805852Z,Shifting ladder up to start 20.47
+2025-07-24T02:21:57.8807476Z,Placing ladder from 20.47
+2025-07-24T02:21:58.2833025Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:58.2994175Z,Placing ladder from 20.47
+2025-07-24T02:21:58.3784809Z,Shifting ladder up to start 20.48
+2025-07-24T02:21:58.3786253Z,Placing ladder from 20.48
+2025-07-24T02:21:58.4253973Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:58.4414371Z,Placing ladder from 20.46
+2025-07-24T02:21:58.4567722Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:58.4724108Z,Placing ladder from 20.46
+2025-07-24T02:21:58.4883381Z,Shifting ladder up to start 20.47
+2025-07-24T02:21:58.4885568Z,Placing ladder from 20.47
+2025-07-24T02:21:58.7557758Z,Shifting ladder up to start 20.48
+2025-07-24T02:21:58.7558418Z,Placing ladder from 20.48
+2025-07-24T02:21:58.7713992Z,Shifting ladder up to start 20.49
+2025-07-24T02:21:58.7714710Z,Placing ladder from 20.49
+2025-07-24T02:21:58.7869867Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:21:58.8028529Z,Placing ladder from 20.47
+2025-07-24T02:21:59.0828417Z,Shifting ladder up to start 20.48
+2025-07-24T02:21:59.0829574Z,Placing ladder from 20.48
+2025-07-24T02:21:59.3173907Z,Shifting ladder up to start 20.49
+2025-07-24T02:21:59.3174716Z,Placing ladder from 20.49
+2025-07-24T02:21:59.4427608Z,Shifting ladder up to start 20.50
+2025-07-24T02:21:59.4429472Z,Placing ladder from 20.50
+2025-07-24T02:21:59.6450103Z,Shifting ladder up to start 20.51
+2025-07-24T02:21:59.6451339Z,Placing ladder from 20.51
+2025-07-24T02:21:59.7700157Z,Shifting ladder down to start 20.50
+2025-07-24T02:21:59.7702335Z,Placing ladder from 20.50
+2025-07-24T02:22:00.1294383Z,Shifting ladder up to start 20.51
+2025-07-24T02:22:00.1295884Z,Placing ladder from 20.51
+2025-07-24T02:22:00.3007478Z,Shifting ladder up to start 20.52
+2025-07-24T02:22:00.3009126Z,Placing ladder from 20.52
+2025-07-24T02:22:00.4872279Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:00.5026725Z,Placing ladder from 20.51
+2025-07-24T02:22:00.5183181Z,Shifting ladder up to start 20.52
+2025-07-24T02:22:00.5184600Z,Placing ladder from 20.52
+2025-07-24T02:22:00.6435345Z,Shifting ladder up to start 20.53
+2025-07-24T02:22:00.6438459Z,Placing ladder from 20.53
+2025-07-24T02:22:00.7377909Z,Shifting ladder up to start 20.54
+2025-07-24T02:22:00.7379600Z,Placing ladder from 20.54
+2025-07-24T02:22:00.7526317Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:00.7685698Z,Placing ladder from 20.54
+2025-07-24T02:22:00.7842267Z,Shifting ladder up to start 20.55
+2025-07-24T02:22:00.7842715Z,Placing ladder from 20.55
+2025-07-24T02:22:00.8325159Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:00.8484988Z,Placing ladder from 20.54
+2025-07-24T02:22:01.0172433Z,Shifting ladder up to start 20.55
+2025-07-24T02:22:01.0173708Z,Placing ladder from 20.55
+2025-07-24T02:22:01.0477985Z,Shifting ladder down to start 20.54
+2025-07-24T02:22:01.0479639Z,Placing ladder from 20.54
+2025-07-24T02:22:01.0632346Z,Shifting ladder up to start 20.55
+2025-07-24T02:22:01.0633992Z,Placing ladder from 20.55
+2025-07-24T02:22:01.1555756Z,Shifting ladder down to start 20.54
+2025-07-24T02:22:01.1557372Z,Placing ladder from 20.54
+2025-07-24T02:22:01.1714366Z,Shifting ladder up to start 20.55
+2025-07-24T02:22:01.1714725Z,Placing ladder from 20.55
+2025-07-24T02:22:01.1863258Z,Shifting ladder down to start 20.54
+2025-07-24T02:22:01.1863932Z,Placing ladder from 20.54
+2025-07-24T02:22:01.2020796Z,Shifting ladder up to start 20.55
+2025-07-24T02:22:01.2022512Z,Placing ladder from 20.55
+2025-07-24T02:22:01.2486249Z,Shifting ladder up to start 20.56
+2025-07-24T02:22:01.2488676Z,Placing ladder from 20.56
+2025-07-24T02:22:01.4673379Z,Shifting ladder up to start 20.57
+2025-07-24T02:22:01.4675556Z,Placing ladder from 20.57
+2025-07-24T02:22:01.4836049Z,Shifting ladder up to start 20.57
+2025-07-24T02:22:01.4836659Z,Placing ladder from 20.57
+2025-07-24T02:22:01.6406331Z,Shifting ladder up to start 20.58
+2025-07-24T02:22:01.6408532Z,Placing ladder from 20.58
+2025-07-24T02:22:01.6564556Z,Shifting ladder up to start 20.59
+2025-07-24T02:22:01.6567013Z,Placing ladder from 20.59
+2025-07-24T02:22:01.6712176Z,Shifting ladder up to start 20.60
+2025-07-24T02:22:01.6714951Z,Placing ladder from 20.60
+2025-07-24T02:22:01.6869005Z,Shifting ladder up to start 20.61
+2025-07-24T02:22:01.6869763Z,Placing ladder from 20.61
+2025-07-24T02:22:01.8588261Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:01.8742606Z,Placing ladder from 20.60
+2025-07-24T02:22:01.8900348Z,Shifting ladder up to start 20.61
+2025-07-24T02:22:01.8902048Z,Placing ladder from 20.61
+2025-07-24T02:22:02.7457751Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:02.7616346Z,Placing ladder from 20.59
+2025-07-24T02:22:02.7934871Z,Shifting ladder up to start 20.60
+2025-07-24T02:22:02.7936986Z,Placing ladder from 20.60
+2025-07-24T02:22:02.8413529Z,Shifting ladder down to start 20.59
+2025-07-24T02:22:02.8415388Z,Placing ladder from 20.59
+2025-07-24T02:22:03.4526931Z,Shifting ladder up to start 20.60
+2025-07-24T02:22:03.4527917Z,Placing ladder from 20.60
+2025-07-24T02:22:03.5629830Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:03.5782669Z,Placing ladder from 20.60
+2025-07-24T02:22:03.6257977Z,Shifting ladder up to start 20.61
+2025-07-24T02:22:03.6259508Z,Placing ladder from 20.61
+2025-07-24T02:22:03.7671300Z,Shifting ladder down to start 20.60
+2025-07-24T02:22:03.7672913Z,Placing ladder from 20.60
+2025-07-24T02:22:03.9688014Z,Shifting ladder up to start 20.61
+2025-07-24T02:22:03.9690569Z,Placing ladder from 20.61
+2025-07-24T02:22:04.0770960Z,Shifting ladder up to start 20.62
+2025-07-24T02:22:04.0772430Z,Placing ladder from 20.62
+2025-07-24T02:22:04.6106702Z,Shifting ladder up to start 20.61
+2025-07-24T02:22:04.6108715Z,Placing ladder from 20.61
+2025-07-24T02:22:04.6268888Z,Shifting ladder up to start 20.62
+2025-07-24T02:22:04.6270656Z,Placing ladder from 20.62
+2025-07-24T02:22:04.6418032Z,Shifting ladder down to start 20.61
+2025-07-24T02:22:04.6421136Z,Placing ladder from 20.61
+2025-07-24T02:22:04.6570484Z,Shifting ladder up to start 20.62
+2025-07-24T02:22:04.6572642Z,Placing ladder from 20.62
+2025-07-24T02:22:04.7033244Z,Shifting ladder down to start 20.61
+2025-07-24T02:22:04.7033839Z,Placing ladder from 20.61
+2025-07-24T02:22:04.7186949Z,Shifting ladder up to start 20.62
+2025-07-24T02:22:04.7188690Z,Placing ladder from 20.62
+2025-07-24T02:22:04.9996194Z,Shifting ladder up to start 20.63
+2025-07-24T02:22:04.9996682Z,Placing ladder from 20.63
+2025-07-24T02:22:05.0157418Z,Shifting ladder up to start 20.64
+2025-07-24T02:22:05.0158041Z,Placing ladder from 20.64
+2025-07-24T02:22:05.0947355Z,Shifting ladder up to start 20.64
+2025-07-24T02:22:05.0949187Z,Placing ladder from 20.64
+2025-07-24T02:22:05.7645653Z,Shifting ladder up to start 20.65
+2025-07-24T02:22:05.7647499Z,Placing ladder from 20.65
+2025-07-24T02:22:05.8584394Z,Shifting ladder up to start 20.66
+2025-07-24T02:22:05.8588364Z,Placing ladder from 20.66
+2025-07-24T02:22:05.9998289Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:06.0153480Z,Placing ladder from 20.65
+2025-07-24T02:22:06.0626024Z,Shifting ladder up to start 20.66
+2025-07-24T02:22:06.0627007Z,Placing ladder from 20.66
+2025-07-24T02:22:06.1706453Z,Shifting ladder up to start 20.67
+2025-07-24T02:22:06.1708262Z,Placing ladder from 20.67
+2025-07-24T02:22:06.3248296Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:06.3407730Z,Placing ladder from 20.66
+2025-07-24T02:22:06.6386841Z,Shifting ladder up to start 20.67
+2025-07-24T02:22:06.6387518Z,Placing ladder from 20.67
+2025-07-24T02:22:06.6707598Z,Shifting ladder down to start 20.66
+2025-07-24T02:22:06.6708791Z,Placing ladder from 20.66
+2025-07-24T02:22:06.7323531Z,Shifting ladder up to start 20.67
+2025-07-24T02:22:06.7325875Z,Placing ladder from 20.67
+2025-07-24T02:22:06.9957130Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:07.0118323Z,Placing ladder from 20.66
+2025-07-24T02:22:07.0590180Z,Shifting ladder up to start 20.67
+2025-07-24T02:22:07.0591151Z,Placing ladder from 20.67
+2025-07-24T02:22:07.1676020Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:07.1841775Z,Placing ladder from 20.66
+2025-07-24T02:22:07.2315633Z,Shifting ladder up to start 20.67
+2025-07-24T02:22:07.2316749Z,Placing ladder from 20.67
+2025-07-24T02:22:07.2783265Z,Shifting ladder up to start 20.68
+2025-07-24T02:22:07.2783786Z,Placing ladder from 20.68
+2025-07-24T02:22:07.5746843Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:07.5903717Z,Placing ladder from 20.66
+2025-07-24T02:22:07.9184474Z,Shifting ladder up to start 20.66
+2025-07-24T02:22:07.9186195Z,Placing ladder from 20.66
+2025-07-24T02:22:08.1214551Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:08.1368577Z,Placing ladder from 20.65
+2025-07-24T02:22:08.2308917Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:08.2467173Z,Placing ladder from 20.64
+2025-07-24T02:22:08.3566192Z,Shifting ladder up to start 20.65
+2025-07-24T02:22:08.3567538Z,Placing ladder from 20.65
+2025-07-24T02:22:08.4048005Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:08.4201869Z,Placing ladder from 20.64
+2025-07-24T02:22:08.4516349Z,Shifting ladder up to start 20.65
+2025-07-24T02:22:08.4517693Z,Placing ladder from 20.65
+2025-07-24T02:22:08.5453595Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:08.5617224Z,Placing ladder from 20.64
+2025-07-24T02:22:08.8132244Z,Shifting ladder up to start 20.65
+2025-07-24T02:22:08.8134777Z,Placing ladder from 20.65
+2025-07-24T02:22:09.1238560Z,Shifting ladder down to start 20.64
+2025-07-24T02:22:09.1239003Z,Placing ladder from 20.64
+2025-07-24T02:22:09.2166265Z,Shifting ladder up to start 20.65
+2025-07-24T02:22:09.2166943Z,Placing ladder from 20.65
+2025-07-24T02:22:09.2318554Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:09.2477709Z,Placing ladder from 20.64
+2025-07-24T02:22:09.3736112Z,Shifting ladder up to start 20.65
+2025-07-24T02:22:09.3736864Z,Placing ladder from 20.65
+2025-07-24T02:22:09.7511484Z,Shifting ladder down to start 20.64
+2025-07-24T02:22:09.7513918Z,Placing ladder from 20.64
+2025-07-24T02:22:09.8428848Z,Shifting ladder up to start 20.65
+2025-07-24T02:22:09.8430804Z,Placing ladder from 20.65
+2025-07-24T02:22:10.3297029Z,Shifting ladder down to start 20.64
+2025-07-24T02:22:10.3298338Z,Placing ladder from 20.64
+2025-07-24T02:22:10.7996273Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:10.8149838Z,Placing ladder from 20.63
+2025-07-24T02:22:10.9092840Z,Shifting ladder down to start 20.62
+2025-07-24T02:22:10.9093928Z,Placing ladder from 20.62
+2025-07-24T02:22:10.9250146Z,Shifting ladder up to start 20.63
+2025-07-24T02:22:10.9252088Z,Placing ladder from 20.63
+2025-07-24T02:22:10.9720246Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:10.9877787Z,Placing ladder from 20.62
+2025-07-24T02:22:11.5821648Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:11.5987255Z,Placing ladder from 20.61
+2025-07-24T02:22:11.7859157Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:11.8016170Z,Placing ladder from 20.60
+2025-07-24T02:22:11.8325660Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:11.8484261Z,Placing ladder from 20.60
+2025-07-24T02:22:11.9876857Z,Shifting ladder up to start 20.61
+2025-07-24T02:22:11.9878814Z,Placing ladder from 20.61
+2025-07-24T02:22:12.3141785Z,Shifting ladder down to start 20.60
+2025-07-24T02:22:12.3144012Z,Placing ladder from 20.60
+2025-07-24T02:22:12.3299218Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:12.3459289Z,Placing ladder from 20.59
+2025-07-24T02:22:12.3615741Z,Shifting ladder up to start 20.60
+2025-07-24T02:22:12.3616248Z,Placing ladder from 20.60
+2025-07-24T02:22:12.4086552Z,Shifting ladder down to start 20.59
+2025-07-24T02:22:12.4087097Z,Placing ladder from 20.59
+2025-07-24T02:22:13.0781196Z,Shifting ladder up to start 20.60
+2025-07-24T02:22:13.0783588Z,Placing ladder from 20.60
+2025-07-24T02:22:13.3106659Z,Shifting ladder up to start 20.61
+2025-07-24T02:22:13.3109091Z,Placing ladder from 20.61
+2025-07-24T02:22:13.4204752Z,Shifting ladder up to start 20.61
+2025-07-24T02:22:13.4205710Z,Placing ladder from 20.61
+2025-07-24T02:22:13.4996167Z,Shifting ladder down to start 20.60
+2025-07-24T02:22:13.4998099Z,Placing ladder from 20.60
+2025-07-24T02:22:13.9828844Z,Shifting ladder up to start 20.61
+2025-07-24T02:22:13.9831666Z,Placing ladder from 20.61
+2025-07-24T02:22:14.0458008Z,Shifting ladder up to start 20.62
+2025-07-24T02:22:14.0458872Z,Placing ladder from 20.62
+2025-07-24T02:22:14.2197873Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:14.2345261Z,Placing ladder from 20.61
+2025-07-24T02:22:14.2664435Z,Shifting ladder up to start 20.62
+2025-07-24T02:22:14.2665641Z,Placing ladder from 20.62
+2025-07-24T02:22:14.6086554Z,Shifting ladder up to start 20.63
+2025-07-24T02:22:14.6087809Z,Placing ladder from 20.63
+2025-07-24T02:22:15.0616354Z,Shifting ladder up to start 20.64
+2025-07-24T02:22:15.0616863Z,Placing ladder from 20.64
+2025-07-24T02:22:15.2185768Z,Shifting ladder down to start 20.63
+2025-07-24T02:22:15.2186605Z,Placing ladder from 20.63
+2025-07-24T02:22:15.3748741Z,Shifting ladder up to start 20.64
+2025-07-24T02:22:15.3750619Z,Placing ladder from 20.64
+2025-07-24T02:22:15.4059795Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:15.4218069Z,Placing ladder from 20.63
+2025-07-24T02:22:15.4983903Z,Shifting ladder up to start 20.64
+2025-07-24T02:22:15.4985350Z,Placing ladder from 20.64
+2025-07-24T02:22:15.5294374Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:15.5447612Z,Placing ladder from 20.63
+2025-07-24T02:22:15.5759536Z,Shifting ladder up to start 20.64
+2025-07-24T02:22:15.5761518Z,Placing ladder from 20.64
+2025-07-24T02:22:15.6071162Z,Shifting ladder up to start 20.65
+2025-07-24T02:22:15.6072678Z,Placing ladder from 20.65
+2025-07-24T02:22:15.6689388Z,Shifting ladder up to start 20.66
+2025-07-24T02:22:15.6691410Z,Placing ladder from 20.66
+2025-07-24T02:22:15.7000349Z,Shifting ladder up to start 20.67
+2025-07-24T02:22:15.7001224Z,Placing ladder from 20.67
+2025-07-24T02:22:15.8114064Z,Shifting ladder up to start 20.68
+2025-07-24T02:22:15.8115239Z,Placing ladder from 20.68
+2025-07-24T02:22:15.8577309Z,Shifting ladder up to start 20.69
+2025-07-24T02:22:15.8578277Z,Placing ladder from 20.69
+2025-07-24T02:22:15.9363946Z,Shifting ladder up to start 20.70
+2025-07-24T02:22:15.9364458Z,Placing ladder from 20.70
+2025-07-24T02:22:16.0455663Z,Shifting ladder up to start 20.71
+2025-07-24T02:22:16.0457847Z,Placing ladder from 20.71
+2025-07-24T02:22:16.2472826Z,Shifting ladder up to start 20.72
+2025-07-24T02:22:16.2473740Z,Placing ladder from 20.72
+2025-07-24T02:22:16.4040632Z,Shifting ladder up to start 20.73
+2025-07-24T02:22:16.4041556Z,Placing ladder from 20.73
+2025-07-24T02:22:16.4201314Z,Shifting ladder up to start 20.74
+2025-07-24T02:22:16.4202323Z,Placing ladder from 20.74
+2025-07-24T02:22:16.5767347Z,Shifting ladder up to start 20.75
+2025-07-24T02:22:16.5768068Z,Placing ladder from 20.75
+2025-07-24T02:22:16.7808298Z,Shifting ladder up to start 20.76
+2025-07-24T02:22:16.7808909Z,Placing ladder from 20.76
+2025-07-24T02:22:16.9671481Z,Shifting ladder up to start 20.77
+2025-07-24T02:22:16.9672660Z,Placing ladder from 20.77
+2025-07-24T02:22:17.0148672Z,Shifting ladder up to start 20.78
+2025-07-24T02:22:17.0150440Z,Placing ladder from 20.78
+2025-07-24T02:22:17.2174349Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:17.2333370Z,Placing ladder from 20.78
+2025-07-24T02:22:17.4820615Z,Shifting ladder up to start 20.79
+2025-07-24T02:22:17.4823340Z,Placing ladder from 20.79
+2025-07-24T02:22:17.6699447Z,Shifting ladder up to start 20.80
+2025-07-24T02:22:17.6699847Z,Placing ladder from 20.80
+2025-07-24T02:22:17.7941708Z,Shifting ladder up to start 20.81
+2025-07-24T02:22:17.7942607Z,Placing ladder from 20.81
+2025-07-24T02:22:17.8559384Z,Shifting ladder up to start 20.82
+2025-07-24T02:22:17.8561494Z,Placing ladder from 20.82
+2025-07-24T02:22:17.9651387Z,Shifting ladder up to start 20.83
+2025-07-24T02:22:17.9652454Z,Placing ladder from 20.83
+2025-07-24T02:22:18.0117243Z,Shifting ladder up to start 20.84
+2025-07-24T02:22:18.0117980Z,Placing ladder from 20.84
+2025-07-24T02:22:18.0581572Z,Shifting ladder down to start 20.83
+2025-07-24T02:22:18.0583120Z,Placing ladder from 20.83
+2025-07-24T02:22:18.1978538Z,Shifting ladder up to start 20.84
+2025-07-24T02:22:18.1979506Z,Placing ladder from 20.84
+2025-07-24T02:22:18.2770659Z,Shifting ladder up to start 20.85
+2025-07-24T02:22:18.2772961Z,Placing ladder from 20.85
+2025-07-24T02:22:18.4956627Z,Shifting ladder up to start 20.86
+2025-07-24T02:22:18.4957083Z,Placing ladder from 20.86
+2025-07-24T02:22:18.7605086Z,Shifting ladder up to start 20.87
+2025-07-24T02:22:18.7606374Z,Placing ladder from 20.87
+2025-07-24T02:22:18.9325227Z,Shifting ladder up to start 20.88
+2025-07-24T02:22:18.9326719Z,Placing ladder from 20.88
+2025-07-24T02:22:19.1816260Z,Shifting ladder up to start 20.89
+2025-07-24T02:22:19.1817620Z,Placing ladder from 20.89
+2025-07-24T02:22:19.2596636Z,Shifting ladder up to start 20.90
+2025-07-24T02:22:19.2599359Z,Placing ladder from 20.90
+2025-07-24T02:22:19.3376542Z,Shifting ladder down to start 20.89
+2025-07-24T02:22:19.3376863Z,Placing ladder from 20.89
+2025-07-24T02:22:19.3533033Z,Shifting ladder up to start 20.90
+2025-07-24T02:22:19.3534395Z,Placing ladder from 20.90
+2025-07-24T02:22:19.5398735Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:22:19.5555936Z,Placing ladder from 20.89
+2025-07-24T02:22:20.1167920Z,Shifting ladder up to start 20.90
+2025-07-24T02:22:20.1168444Z,Placing ladder from 20.90
+2025-07-24T02:22:20.2415476Z,Shifting ladder up to start 20.91
+2025-07-24T02:22:20.2417229Z,Placing ladder from 20.91
+2025-07-24T02:22:20.3336966Z,Shifting ladder up to start 20.92
+2025-07-24T02:22:20.3338049Z,Placing ladder from 20.92
+2025-07-24T02:22:20.7729404Z,Shifting ladder up to start 20.93
+2025-07-24T02:22:20.7731374Z,Placing ladder from 20.93
+2025-07-24T02:22:20.8830357Z,Shifting ladder up to start 20.94
+2025-07-24T02:22:20.8831224Z,Placing ladder from 20.94
+2025-07-24T02:22:20.9452649Z,Shifting ladder up to start 20.95
+2025-07-24T02:22:20.9453486Z,Placing ladder from 20.95
+2025-07-24T02:22:21.5688878Z,Shifting ladder up to start 20.96
+2025-07-24T02:22:21.5690327Z,Placing ladder from 20.96
+2025-07-24T02:22:21.7237085Z,Shifting ladder up to start 20.97
+2025-07-24T02:22:21.7238603Z,Placing ladder from 20.97
+2025-07-24T02:22:21.7397627Z,Shifting ladder up to start 20.98
+2025-07-24T02:22:21.7398965Z,Placing ladder from 20.98
+2025-07-24T02:22:21.8182627Z,Shifting ladder up to start 20.99
+2025-07-24T02:22:21.8184930Z,Placing ladder from 20.99
+2025-07-24T02:22:22.0232667Z,Shifting ladder up to start 21.00
+2025-07-24T02:22:22.0233795Z,Placing ladder from 21.00
+2025-07-24T02:22:22.4111010Z,Shifting ladder up to start 21.01
+2025-07-24T02:22:22.4111646Z,Placing ladder from 21.01
+2025-07-24T02:22:22.5049941Z,Shifting ladder up to start 21.02
+2025-07-24T02:22:22.5050417Z,Placing ladder from 21.02
+2025-07-24T02:22:22.5522610Z,Shifting ladder up to start 21.03
+2025-07-24T02:22:22.5524443Z,Placing ladder from 21.03
+2025-07-24T02:22:22.6782759Z,Shifting ladder up to start 21.04
+2025-07-24T02:22:22.6784772Z,Placing ladder from 21.04
+2025-07-24T02:22:22.6937904Z,Shifting ladder up to start 21.05
+2025-07-24T02:22:22.6939172Z,Placing ladder from 21.05
+2025-07-24T02:22:22.7094298Z,Shifting ladder up to start 21.06
+2025-07-24T02:22:22.7095558Z,Placing ladder from 21.06
+2025-07-24T02:22:22.7252693Z,Shifting ladder up to start 21.07
+2025-07-24T02:22:22.7253684Z,Placing ladder from 21.07
+2025-07-24T02:22:22.8979416Z,Shifting ladder up to start 21.08
+2025-07-24T02:22:22.8980649Z,Placing ladder from 21.08
+2025-07-24T02:22:22.9129354Z,Shifting ladder up to start 21.09
+2025-07-24T02:22:22.9131075Z,Placing ladder from 21.09
+2025-07-24T02:22:22.9899488Z,Shifting ladder up to start 21.10
+2025-07-24T02:22:22.9902000Z,Placing ladder from 21.10
+2025-07-24T02:22:23.1769650Z,Shifting ladder up to start 21.11
+2025-07-24T02:22:23.1770768Z,Placing ladder from 21.11
+2025-07-24T02:22:23.2245135Z,Shifting ladder up to start 21.12
+2025-07-24T02:22:23.2245518Z,Placing ladder from 21.12
+2025-07-24T02:22:23.2544838Z,Shifting ladder up to start 21.13
+2025-07-24T02:22:23.2545808Z,Placing ladder from 21.13
+2025-07-24T02:22:23.3018914Z,Shifting ladder up to start 21.14
+2025-07-24T02:22:23.3020967Z,Placing ladder from 21.14
+2025-07-24T02:22:23.3482178Z,Shifting ladder up to start 21.15
+2025-07-24T02:22:23.3484587Z,Placing ladder from 21.15
+2025-07-24T02:22:23.3639789Z,Shifting ladder up to start 21.16
+2025-07-24T02:22:23.3640472Z,Placing ladder from 21.16
+2025-07-24T02:22:23.3800113Z,Shifting ladder up to start 21.17
+2025-07-24T02:22:23.3801903Z,Placing ladder from 21.17
+2025-07-24T02:22:23.3960950Z,Shifting ladder up to start 21.18
+2025-07-24T02:22:23.3962362Z,Placing ladder from 21.18
+2025-07-24T02:22:23.4111718Z,Shifting ladder up to start 21.19
+2025-07-24T02:22:23.4112395Z,Placing ladder from 21.19
+2025-07-24T02:22:23.5210108Z,Shifting ladder up to start 21.20
+2025-07-24T02:22:23.5211291Z,Placing ladder from 21.20
+2025-07-24T02:22:23.7721846Z,Shifting ladder up to start 21.21
+2025-07-24T02:22:23.7722678Z,Placing ladder from 21.21
+2025-07-24T02:22:23.8037601Z,Shifting ladder up to start 21.22
+2025-07-24T02:22:23.8039950Z,Placing ladder from 21.22
+2025-07-24T02:22:24.0986248Z,Shifting ladder up to start 21.22
+2025-07-24T02:22:24.0987563Z,Placing ladder from 21.22
+2025-07-24T02:22:24.1142750Z,Shifting ladder up to start 21.23
+2025-07-24T02:22:24.1145480Z,Placing ladder from 21.23
+2025-07-24T02:22:24.1451421Z,Shifting ladder up to start 21.24
+2025-07-24T02:22:24.1452872Z,Placing ladder from 21.24
+2025-07-24T02:22:24.3754932Z,Shifting ladder up to start 21.25
+2025-07-24T02:22:24.3755710Z,Placing ladder from 21.25
+2025-07-24T02:22:24.5306278Z,Shifting ladder up to start 21.26
+2025-07-24T02:22:24.5306787Z,Placing ladder from 21.26
+2025-07-24T02:22:24.5453913Z,Shifting ladder up to start 21.27
+2025-07-24T02:22:24.5455672Z,Placing ladder from 21.27
+2025-07-24T02:22:24.6395249Z,Shifting ladder up to start 21.28
+2025-07-24T02:22:24.6396945Z,Placing ladder from 21.28
+2025-07-24T02:22:24.6704627Z,Shifting ladder down to start 21.27
+2025-07-24T02:22:24.6705804Z,Placing ladder from 21.27
+2025-07-24T02:22:24.7505585Z,Shifting ladder up to start 21.28
+2025-07-24T02:22:24.7506610Z,Placing ladder from 21.28
+2025-07-24T02:23:27.7665780Z,Flattening 430 @ market (bid=21.00, vwap=20.17)
+2025-07-24T02:23:27.7667112Z,Shifting ladder down to start 21.27
+2025-07-24T02:23:27.7668190Z,Placing ladder from 21.27
+2025-07-24T02:23:27.7670872Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:27.7982968Z,Placing ladder from 20.98
+2025-07-24T02:23:27.8133067Z,Shifting ladder up to start 20.99
+2025-07-24T02:23:27.8134734Z,Placing ladder from 20.99
+2025-07-24T02:23:27.8442477Z,Shifting ladder up to start 21.00
+2025-07-24T02:23:27.8444135Z,Placing ladder from 21.00
+2025-07-24T02:23:27.8751721Z,Shifting ladder up to start 21.01
+2025-07-24T02:23:27.8752948Z,Placing ladder from 21.01
+2025-07-24T02:23:27.9053977Z,Shifting ladder up to start 21.02
+2025-07-24T02:23:27.9054360Z,Placing ladder from 21.02
+2025-07-24T02:23:27.9684494Z,Shifting ladder down to start 21.01
+2025-07-24T02:23:27.9687188Z,Placing ladder from 21.01
+2025-07-24T02:23:28.0003372Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:28.0156005Z,Placing ladder from 20.98
+2025-07-24T02:23:28.0316685Z,Shifting ladder up to start 20.99
+2025-07-24T02:23:28.0318525Z,Placing ladder from 20.99
+2025-07-24T02:23:28.2833814Z,Shifting ladder up to start 21.00
+2025-07-24T02:23:28.2835217Z,Placing ladder from 21.00
+2025-07-24T02:23:28.3297748Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:28.3453062Z,Placing ladder from 20.99
+2025-07-24T02:23:28.3927926Z,Shifting ladder down to start 20.98
+2025-07-24T02:23:28.3930225Z,Placing ladder from 20.98
+2025-07-24T02:23:28.4725556Z,Shifting ladder up to start 20.99
+2025-07-24T02:23:28.4728331Z,Placing ladder from 20.99
+2025-07-24T02:23:28.8015904Z,Shifting ladder down to start 20.98
+2025-07-24T02:23:28.8017218Z,Placing ladder from 20.98
+2025-07-24T02:23:28.8476483Z,Shifting ladder up to start 20.99
+2025-07-24T02:23:28.8477664Z,Placing ladder from 20.99
+2025-07-24T02:23:29.0036137Z,Shifting ladder down to start 20.98
+2025-07-24T02:23:29.0037033Z,Placing ladder from 20.98
+2025-07-24T02:23:29.0353919Z,Shifting ladder up to start 20.99
+2025-07-24T02:23:29.0355557Z,Placing ladder from 20.99
+2025-07-24T02:23:29.0830986Z,Shifting ladder down to start 20.98
+2025-07-24T02:23:29.0832037Z,Placing ladder from 20.98
+2025-07-24T02:23:29.8046533Z,Shifting ladder down to start 20.97
+2025-07-24T02:23:29.8046969Z,Placing ladder from 20.97
+2025-07-24T02:23:30.3202628Z,Shifting ladder down to start 20.96
+2025-07-24T02:23:30.3204186Z,Placing ladder from 20.96
+2025-07-24T02:23:30.5551642Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:30.5718458Z,Placing ladder from 20.95
+2025-07-24T02:23:30.8348956Z,Shifting ladder up to start 20.96
+2025-07-24T02:23:30.8350116Z,Placing ladder from 20.96
+2025-07-24T02:23:31.0558030Z,Shifting ladder up to start 20.97
+2025-07-24T02:23:31.0559077Z,Placing ladder from 20.97
+2025-07-24T02:23:31.3677450Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:31.3836463Z,Placing ladder from 20.96
+2025-07-24T02:23:31.3997179Z,Shifting ladder up to start 20.97
+2025-07-24T02:23:31.3997948Z,Placing ladder from 20.97
+2025-07-24T02:23:31.6978580Z,Shifting ladder up to start 20.98
+2025-07-24T02:23:31.6981557Z,Placing ladder from 20.98
+2025-07-24T02:23:31.7609140Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:31.7753784Z,Placing ladder from 20.97
+2025-07-24T02:23:31.8239185Z,Shifting ladder up to start 20.98
+2025-07-24T02:23:31.8240023Z,Placing ladder from 20.98
+2025-07-24T02:23:32.0586927Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:32.0748448Z,Placing ladder from 20.97
+2025-07-24T02:23:32.2469386Z,Shifting ladder down to start 20.96
+2025-07-24T02:23:32.2470889Z,Placing ladder from 20.96
+2025-07-24T02:23:32.3092343Z,Shifting ladder up to start 20.97
+2025-07-24T02:23:32.3093336Z,Placing ladder from 20.97
+2025-07-24T02:23:32.4327643Z,Shifting ladder up to start 20.97
+2025-07-24T02:23:32.4328038Z,Placing ladder from 20.97
+2025-07-24T02:23:32.8555005Z,Shifting ladder down to start 20.96
+2025-07-24T02:23:32.8555572Z,Placing ladder from 20.96
+2025-07-24T02:23:33.0110287Z,Shifting ladder up to start 20.97
+2025-07-24T02:23:33.0111004Z,Placing ladder from 20.97
+2025-07-24T02:23:33.2140174Z,Shifting ladder up to start 20.98
+2025-07-24T02:23:33.2143815Z,Placing ladder from 20.98
+2025-07-24T02:23:33.5084280Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:33.5236649Z,Placing ladder from 20.97
+2025-07-24T02:23:33.5554427Z,Shifting ladder down to start 20.96
+2025-07-24T02:23:33.5554918Z,Placing ladder from 20.96
+2025-07-24T02:23:33.5721268Z,Shifting ladder up to start 20.97
+2025-07-24T02:23:33.5722552Z,Placing ladder from 20.97
+2025-07-24T02:23:33.7107048Z,Shifting ladder up to start 20.98
+2025-07-24T02:23:33.7108090Z,Placing ladder from 20.98
+2025-07-24T02:23:33.7735173Z,Shifting ladder down to start 20.97
+2025-07-24T02:23:33.7735840Z,Placing ladder from 20.97
+2025-07-24T02:23:33.7892608Z,Shifting ladder up to start 20.98
+2025-07-24T02:23:33.7893552Z,Placing ladder from 20.98
+2025-07-24T02:23:33.8202433Z,Shifting ladder up to start 20.98
+2025-07-24T02:23:33.8202798Z,Placing ladder from 20.98
+2025-07-24T02:23:34.1176698Z,Shifting ladder up to start 20.99
+2025-07-24T02:23:34.1179060Z,Placing ladder from 20.99
+2025-07-24T02:23:34.1800916Z,Shifting ladder down to start 20.98
+2025-07-24T02:23:34.1802384Z,Placing ladder from 20.98
+2025-07-24T02:23:34.2734560Z,Shifting ladder up to start 20.99
+2025-07-24T02:23:34.2735775Z,Placing ladder from 20.99
+2025-07-24T02:23:34.4008561Z,Shifting ladder down to start 20.98
+2025-07-24T02:23:34.4009764Z,Placing ladder from 20.98
+2025-07-24T02:23:34.4623559Z,Shifting ladder up to start 20.99
+2025-07-24T02:23:34.4624265Z,Placing ladder from 20.99
+2025-07-24T02:23:34.6013858Z,Shifting ladder up to start 21.00
+2025-07-24T02:23:34.6015379Z,Placing ladder from 21.00
+2025-07-24T02:23:34.6483356Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:34.6640615Z,Placing ladder from 21.00
+2025-07-24T02:23:34.6948311Z,Shifting ladder up to start 21.00
+2025-07-24T02:23:34.6949272Z,Placing ladder from 21.00
+2025-07-24T02:23:34.8973075Z,Shifting ladder up to start 21.01
+2025-07-24T02:23:34.8974884Z,Placing ladder from 21.01
+2025-07-24T02:23:34.9290864Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:34.9442565Z,Placing ladder from 21.00
+2025-07-24T02:23:34.9914836Z,Shifting ladder up to start 21.01
+2025-07-24T02:23:34.9916592Z,Placing ladder from 21.01
+2025-07-24T02:23:35.1935207Z,Shifting ladder up to start 21.02
+2025-07-24T02:23:35.1935812Z,Placing ladder from 21.02
+2025-07-24T02:23:35.2867124Z,Shifting ladder up to start 21.03
+2025-07-24T02:23:35.2867999Z,Placing ladder from 21.03
+2025-07-24T02:23:35.4111261Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:35.4267109Z,Placing ladder from 21.02
+2025-07-24T02:23:35.5350308Z,Shifting ladder up to start 21.03
+2025-07-24T02:23:35.5351754Z,Placing ladder from 21.03
+2025-07-24T02:23:35.8656617Z,Shifting ladder up to start 21.04
+2025-07-24T02:23:35.8657038Z,Placing ladder from 21.04
+2025-07-24T02:23:36.0226308Z,Shifting ladder up to start 21.05
+2025-07-24T02:23:36.0227881Z,Placing ladder from 21.05
+2025-07-24T02:23:36.0994831Z,Shifting ladder up to start 21.06
+2025-07-24T02:23:36.0995952Z,Placing ladder from 21.06
+2025-07-24T02:23:36.2871119Z,Shifting ladder up to start 21.06
+2025-07-24T02:23:36.2872786Z,Placing ladder from 21.06
+2025-07-24T02:23:36.3175285Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:36.3338913Z,Placing ladder from 21.05
+2025-07-24T02:23:36.3949960Z,Shifting ladder down to start 21.04
+2025-07-24T02:23:36.3950682Z,Placing ladder from 21.04
+2025-07-24T02:23:36.8951265Z,Shifting ladder up to start 21.05
+2025-07-24T02:23:36.8952242Z,Placing ladder from 21.05
+2025-07-24T02:23:36.9736820Z,Shifting ladder down to start 21.04
+2025-07-24T02:23:36.9737207Z,Placing ladder from 21.04
+2025-07-24T02:23:37.4439295Z,Shifting ladder up to start 21.05
+2025-07-24T02:23:37.4440090Z,Placing ladder from 21.05
+2025-07-24T02:23:37.5708649Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:37.5867407Z,Placing ladder from 21.05
+2025-07-24T02:23:37.8066799Z,Shifting ladder up to start 21.05
+2025-07-24T02:23:37.8068417Z,Placing ladder from 21.05
+2025-07-24T02:23:37.8380354Z,Shifting ladder down to start 21.04
+2025-07-24T02:23:37.8381310Z,Placing ladder from 21.04
+2025-07-24T02:23:38.1036853Z,Shifting ladder up to start 21.05
+2025-07-24T02:23:38.1038573Z,Placing ladder from 21.05
+2025-07-24T02:23:38.1655937Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:38.1815053Z,Placing ladder from 21.04
+2025-07-24T02:23:38.3243204Z,Shifting ladder down to start 21.03
+2025-07-24T02:23:38.3244481Z,Placing ladder from 21.03
+2025-07-24T02:23:38.3397050Z,Shifting ladder up to start 21.04
+2025-07-24T02:23:38.3398528Z,Placing ladder from 21.04
+2025-07-24T02:23:38.4341522Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:38.4494850Z,Placing ladder from 21.03
+2025-07-24T02:23:38.9481150Z,Shifting ladder up to start 21.04
+2025-07-24T02:23:38.9482103Z,Placing ladder from 21.04
+2025-07-24T02:23:39.1968479Z,Shifting ladder down to start 21.03
+2025-07-24T02:23:39.1968906Z,Placing ladder from 21.03
+2025-07-24T02:23:39.2745981Z,Shifting ladder up to start 21.03
+2025-07-24T02:23:39.2748928Z,Placing ladder from 21.03
+2025-07-24T02:23:39.4773640Z,Shifting ladder up to start 21.04
+2025-07-24T02:23:39.4776695Z,Placing ladder from 21.04
+2025-07-24T02:23:39.5880616Z,Shifting ladder up to start 21.05
+2025-07-24T02:23:39.5881539Z,Placing ladder from 21.05
+2025-07-24T02:23:39.6803875Z,Shifting ladder up to start 21.05
+2025-07-24T02:23:39.6804783Z,Placing ladder from 21.05
+2025-07-24T02:23:40.1488545Z,Shifting ladder up to start 21.06
+2025-07-24T02:23:40.1491382Z,Placing ladder from 21.06
+2025-07-24T02:23:40.9443034Z,Shifting ladder up to start 21.07
+2025-07-24T02:23:40.9444061Z,Placing ladder from 21.07
+2025-07-24T02:23:41.0518614Z,Shifting ladder down to start 21.06
+2025-07-24T02:23:41.0520299Z,Placing ladder from 21.06
+2025-07-24T02:23:41.0674407Z,Shifting ladder up to start 21.07
+2025-07-24T02:23:41.0675253Z,Placing ladder from 21.07
+2025-07-24T02:23:41.1144972Z,Shifting ladder up to start 21.08
+2025-07-24T02:23:41.1146883Z,Placing ladder from 21.08
+2025-07-24T02:23:41.1297233Z,Shifting ladder up to start 21.09
+2025-07-24T02:23:41.1297855Z,Placing ladder from 21.09
+2025-07-24T02:23:41.1765471Z,Shifting ladder up to start 21.10
+2025-07-24T02:23:41.1766437Z,Placing ladder from 21.10
+2025-07-24T02:23:41.2235463Z,Shifting ladder down to start 21.09
+2025-07-24T02:23:41.2236747Z,Placing ladder from 21.09
+2025-07-24T02:23:41.2390753Z,Shifting ladder up to start 21.10
+2025-07-24T02:23:41.2391836Z,Placing ladder from 21.10
+2025-07-24T02:23:41.2548882Z,Shifting ladder up to start 21.11
+2025-07-24T02:23:41.2549781Z,Placing ladder from 21.11
+2025-07-24T02:23:41.2860136Z,Shifting ladder up to start 21.12
+2025-07-24T02:23:41.2861421Z,Placing ladder from 21.12
+2025-07-24T02:23:41.3011322Z,Shifting ladder down to start 21.11
+2025-07-24T02:23:41.3012490Z,Placing ladder from 21.11
+2025-07-24T02:23:41.3795288Z,Shifting ladder up to start 21.12
+2025-07-24T02:23:41.3796134Z,Placing ladder from 21.12
+2025-07-24T02:23:41.3957249Z,Shifting ladder up to start 21.13
+2025-07-24T02:23:41.3958624Z,Placing ladder from 21.13
+2025-07-24T02:23:41.4263137Z,Flattening 873 @ market (bid=21.14, vwap=21.03)
+2025-07-24T02:23:41.6453488Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:41.6611848Z,Placing ladder from 21.12
+2025-07-24T02:23:41.6756041Z,Shifting ladder up to start 21.13
+2025-07-24T02:23:41.6757586Z,Placing ladder from 21.13
+2025-07-24T02:23:41.7552220Z,Shifting ladder up to start 21.14
+2025-07-24T02:23:41.7553791Z,Placing ladder from 21.14
+2025-07-24T02:23:41.7708693Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:41.7865861Z,Placing ladder from 21.12
+2025-07-24T02:23:41.9580588Z,Shifting ladder up to start 21.13
+2025-07-24T02:23:41.9581544Z,Placing ladder from 21.13
+2025-07-24T02:23:42.0357495Z,Shifting ladder up to start 21.14
+2025-07-24T02:23:42.0359841Z,Placing ladder from 21.14
+2025-07-24T02:23:42.0822574Z,Shifting ladder up to start 21.15
+2025-07-24T02:23:42.0823347Z,Placing ladder from 21.15
+2025-07-24T02:23:42.3621361Z,Shifting ladder up to start 21.16
+2025-07-24T02:23:42.3622480Z,Placing ladder from 21.16
+2025-07-24T02:23:42.4245721Z,Shifting ladder down to start 21.15
+2025-07-24T02:23:42.4247851Z,Placing ladder from 21.15
+2025-07-24T02:23:42.5027925Z,Shifting ladder up to start 21.16
+2025-07-24T02:23:42.5028572Z,Placing ladder from 21.16
+2025-07-24T02:23:42.5653679Z,Shifting ladder down to start 21.15
+2025-07-24T02:23:42.5654079Z,Placing ladder from 21.15
+2025-07-24T02:23:42.6280555Z,Shifting ladder up to start 21.16
+2025-07-24T02:23:42.6281523Z,Placing ladder from 21.16
+2025-07-24T02:23:43.2365859Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:43.2526517Z,Placing ladder from 21.15
+2025-07-24T02:23:43.2827993Z,Shifting ladder up to start 21.16
+2025-07-24T02:23:43.2829142Z,Placing ladder from 21.16
+2025-07-24T02:23:44.0354054Z,Shifting ladder up to start 21.16
+2025-07-24T02:23:44.0355922Z,Placing ladder from 21.16
+2025-07-24T02:23:44.3666188Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:44.3810328Z,Placing ladder from 21.15
+2025-07-24T02:23:44.5361373Z,Shifting ladder up to start 21.16
+2025-07-24T02:23:44.5362805Z,Placing ladder from 21.16
+2025-07-24T02:23:44.7554760Z,Shifting ladder up to start 21.17
+2025-07-24T02:23:44.7556729Z,Placing ladder from 21.17
+2025-07-24T02:23:44.8795078Z,Shifting ladder up to start 21.18
+2025-07-24T02:23:44.8796857Z,Placing ladder from 21.18
+2025-07-24T02:23:45.1593921Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:45.1749216Z,Placing ladder from 21.17
+2025-07-24T02:23:45.4720765Z,Shifting ladder up to start 21.18
+2025-07-24T02:23:45.4721726Z,Placing ladder from 21.18
+2025-07-24T02:23:45.6281651Z,Shifting ladder up to start 21.19
+2025-07-24T02:23:45.6282492Z,Placing ladder from 21.19
+2025-07-24T02:23:45.8013749Z,Shifting ladder up to start 21.20
+2025-07-24T02:23:45.8015432Z,Placing ladder from 21.20
+2025-07-24T02:23:45.8476045Z,Shifting ladder up to start 21.21
+2025-07-24T02:23:45.8478176Z,Placing ladder from 21.21
+2025-07-24T02:23:45.8629895Z,Shifting ladder up to start 21.22
+2025-07-24T02:23:45.8630794Z,Placing ladder from 21.22
+2025-07-24T02:23:45.8792253Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:45.8940297Z,Placing ladder from 21.22
+2025-07-24T02:23:45.9726837Z,Shifting ladder up to start 21.23
+2025-07-24T02:23:45.9727922Z,Placing ladder from 21.23
+2025-07-24T02:23:45.9874145Z,Shifting ladder down to start 21.22
+2025-07-24T02:23:45.9875441Z,Placing ladder from 21.22
+2025-07-24T02:23:46.0022575Z,Shifting ladder up to start 21.23
+2025-07-24T02:23:46.0023366Z,Placing ladder from 21.23
+2025-07-24T02:23:46.0639209Z,Shifting ladder up to start 21.24
+2025-07-24T02:23:46.0640467Z,Placing ladder from 21.24
+2025-07-24T02:23:46.0956488Z,Shifting ladder up to start 21.25
+2025-07-24T02:23:46.0956829Z,Placing ladder from 21.25
+2025-07-24T02:23:46.1897403Z,Shifting ladder up to start 21.26
+2025-07-24T02:23:46.1899133Z,Placing ladder from 21.26
+2025-07-24T02:23:46.2843948Z,Shifting ladder up to start 21.27
+2025-07-24T02:23:46.2844698Z,Placing ladder from 21.27
+2025-07-24T02:23:46.3310345Z,Shifting ladder up to start 21.28
+2025-07-24T02:23:46.3311327Z,Placing ladder from 21.28
+2025-07-24T02:23:46.3939189Z,Flattening 317 @ market (bid=21.30, vwap=21.19)
+2025-07-24T02:23:46.3940237Z,Shifting ladder up to start 21.29
+2025-07-24T02:23:46.3941567Z,Placing ladder from 21.29
+2025-07-24T02:23:46.4101685Z,Shifting ladder down to start 21.28
+2025-07-24T02:23:46.4103595Z,Placing ladder from 21.28
+2025-07-24T02:23:46.8280312Z,Shifting ladder up to start 21.29
+2025-07-24T02:23:46.8281656Z,Placing ladder from 21.29
+2025-07-24T02:23:46.8906133Z,Shifting ladder up to start 21.30
+2025-07-24T02:23:46.8907880Z,Placing ladder from 21.30
+2025-07-24T02:23:46.9057759Z,Shifting ladder up to start 21.31
+2025-07-24T02:23:46.9059418Z,Placing ladder from 21.31
+2025-07-24T02:23:47.3735129Z,Shifting ladder up to start 21.32
+2025-07-24T02:23:47.3736866Z,Placing ladder from 21.32
+2025-07-24T02:23:47.4196700Z,Shifting ladder up to start 21.33
+2025-07-24T02:23:47.4197303Z,Placing ladder from 21.33
+2025-07-24T02:23:47.4983066Z,Shifting ladder up to start 21.34
+2025-07-24T02:23:47.4983787Z,Placing ladder from 21.34
+2025-07-24T02:23:47.6250838Z,Shifting ladder up to start 21.35
+2025-07-24T02:23:47.6253179Z,Placing ladder from 21.35
+2025-07-24T02:23:47.6404002Z,Shifting ladder up to start 21.36
+2025-07-24T02:23:47.6404408Z,Placing ladder from 21.36
+2025-07-24T02:23:47.9827447Z,Shifting ladder up to start 21.37
+2025-07-24T02:23:47.9828419Z,Placing ladder from 21.37
+2025-07-24T02:23:48.1224839Z,Shifting ladder up to start 21.38
+2025-07-24T02:23:48.1225675Z,Placing ladder from 21.38
+2025-07-24T02:23:48.1535654Z,Shifting ladder up to start 21.39
+2025-07-24T02:23:48.1537114Z,Placing ladder from 21.39
+2025-07-24T02:23:48.3100510Z,Shifting ladder up to start 21.40
+2025-07-24T02:23:48.3101508Z,Placing ladder from 21.40
+2025-07-24T02:23:48.4507477Z,Shifting ladder up to start 21.41
+2025-07-24T02:23:48.4508526Z,Placing ladder from 21.41
+2025-07-24T02:23:48.5905628Z,Shifting ladder up to start 21.42
+2025-07-24T02:23:48.5907614Z,Placing ladder from 21.42
+2025-07-24T02:23:48.6208440Z,Shifting ladder up to start 21.43
+2025-07-24T02:23:48.6209275Z,Placing ladder from 21.43
+2025-07-24T02:23:48.8086881Z,Shifting ladder up to start 21.44
+2025-07-24T02:23:48.8088285Z,Placing ladder from 21.44
+2025-07-24T02:23:48.9324908Z,Shifting ladder up to start 21.45
+2025-07-24T02:23:48.9325566Z,Placing ladder from 21.45
+2025-07-24T02:23:48.9489123Z,Shifting ladder up to start 21.46
+2025-07-24T02:23:48.9490918Z,Placing ladder from 21.46
+2025-07-24T02:23:48.9961634Z,Flattening 165 @ market (bid=21.48, vwap=21.38)
+2025-07-24T02:23:48.9962308Z,Shifting ladder up to start 21.47
+2025-07-24T02:23:48.9964247Z,Placing ladder from 21.47
+2025-07-24T02:23:49.0432275Z,Shifting ladder up to start 21.48
+2025-07-24T02:23:49.0433072Z,Placing ladder from 21.48
+2025-07-24T02:23:49.0588896Z,Shifting ladder up to start 21.49
+2025-07-24T02:23:49.0591576Z,Placing ladder from 21.49
+2025-07-24T02:23:49.1066443Z,Shifting ladder up to start 21.50
+2025-07-24T02:23:49.1067141Z,Placing ladder from 21.50
+2025-07-24T02:23:49.1527524Z,Shifting ladder down to start 21.49
+2025-07-24T02:23:49.1527803Z,Placing ladder from 21.49
+2025-07-24T02:23:49.1687965Z,Shifting ladder up to start 21.50
+2025-07-24T02:23:49.1689606Z,Placing ladder from 21.50
+2025-07-24T02:23:49.2301611Z,Shifting ladder up to start 21.51
+2025-07-24T02:23:49.2302782Z,Placing ladder from 21.51
+2025-07-24T02:23:49.2460867Z,Shifting ladder up to start 21.52
+2025-07-24T02:23:49.2461854Z,Placing ladder from 21.52
+2025-07-24T02:23:49.2620139Z,Shifting ladder up to start 21.53
+2025-07-24T02:23:49.2621366Z,Placing ladder from 21.53
+2025-07-24T02:23:49.2781698Z,Shifting ladder up to start 21.54
+2025-07-24T02:23:49.2782621Z,Placing ladder from 21.54
+2025-07-24T02:23:49.2940855Z,Shifting ladder up to start 21.55
+2025-07-24T02:23:49.2941874Z,Placing ladder from 21.55
+2025-07-24T02:23:49.3420559Z,Shifting ladder up to start 21.56
+2025-07-24T02:23:49.3421109Z,Placing ladder from 21.56
+2025-07-24T02:23:49.4204695Z,Shifting ladder up to start 21.57
+2025-07-24T02:23:49.4205189Z,Placing ladder from 21.57
+2025-07-24T02:23:49.5145558Z,Shifting ladder up to start 21.58
+2025-07-24T02:23:49.5148903Z,Placing ladder from 21.58
+2025-07-24T02:23:49.7012597Z,Shifting ladder up to start 21.59
+2025-07-24T02:23:49.7014907Z,Placing ladder from 21.59
+2025-07-24T02:23:49.7170151Z,Shifting ladder up to start 21.60
+2025-07-24T02:23:49.7172244Z,Placing ladder from 21.60
+2025-07-24T02:23:49.9191691Z,Shifting ladder up to start 21.61
+2025-07-24T02:23:49.9192519Z,Placing ladder from 21.61
+2025-07-24T02:23:49.9821101Z,Shifting ladder up to start 21.62
+2025-07-24T02:23:49.9823131Z,Placing ladder from 21.62
+2025-07-24T02:23:50.0288705Z,Shifting ladder up to start 21.63
+2025-07-24T02:23:50.0289667Z,Placing ladder from 21.63
+2025-07-24T02:23:50.0449391Z,Shifting ladder up to start 21.64
+2025-07-24T02:23:50.0451917Z,Placing ladder from 21.64
+2025-07-24T02:23:50.0610958Z,Shifting ladder up to start 21.65
+2025-07-24T02:23:50.0612360Z,Placing ladder from 21.65
+2025-07-24T02:23:50.0760014Z,Shifting ladder up to start 21.66
+2025-07-24T02:23:50.0761988Z,Placing ladder from 21.66
+2025-07-24T02:23:50.4526906Z,Shifting ladder up to start 21.67
+2025-07-24T02:23:50.4528205Z,Placing ladder from 21.67
+2025-07-24T02:23:50.5613337Z,Shifting ladder up to start 21.68
+2025-07-24T02:23:50.5615842Z,Placing ladder from 21.68
+2025-07-24T02:23:50.6079852Z,Shifting ladder up to start 21.69
+2025-07-24T02:23:50.6080753Z,Placing ladder from 21.69
+2025-07-24T02:23:51.0017470Z,Shifting ladder up to start 21.70
+2025-07-24T02:23:51.0019559Z,Placing ladder from 21.70
+2025-07-24T02:23:51.0327810Z,Shifting ladder up to start 21.71
+2025-07-24T02:23:51.0328972Z,Placing ladder from 21.71
+2025-07-24T02:23:51.1109209Z,Shifting ladder up to start 21.72
+2025-07-24T02:23:51.1111094Z,Placing ladder from 21.72
+2025-07-24T02:23:51.3278072Z,Shifting ladder up to start 21.73
+2025-07-24T02:23:51.3280099Z,Placing ladder from 21.73
+2025-07-24T02:23:51.4993653Z,Shifting ladder up to start 21.74
+2025-07-24T02:23:51.4995353Z,Placing ladder from 21.74
+2025-07-24T02:23:51.6547353Z,Flattening 168 @ market (bid=21.78, vwap=21.67)
+2025-07-24T02:23:51.6549580Z,Shifting ladder up to start 21.75
+2025-07-24T02:23:51.6550985Z,Placing ladder from 21.75
+2025-07-24T02:23:51.6696803Z,Shifting ladder up to start 21.76
+2025-07-24T02:23:51.6698348Z,Placing ladder from 21.76
+2025-07-24T02:23:51.6858544Z,Shifting ladder up to start 21.77
+2025-07-24T02:23:51.6859218Z,Placing ladder from 21.77
+2025-07-24T02:23:51.7482200Z,Shifting ladder up to start 21.78
+2025-07-24T02:23:51.7483649Z,Placing ladder from 21.78
+2025-07-24T02:23:51.7955235Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:51.8115890Z,Placing ladder from 21.77
+2025-07-24T02:23:51.8427698Z,Shifting ladder up to start 21.78
+2025-07-24T02:23:51.8428186Z,Placing ladder from 21.78
+2025-07-24T02:23:51.9377145Z,Shifting ladder up to start 21.79
+2025-07-24T02:23:51.9377932Z,Placing ladder from 21.79
+2025-07-24T02:23:52.0327936Z,Shifting ladder up to start 21.79
+2025-07-24T02:23:52.0328959Z,Placing ladder from 21.79
+2025-07-24T02:23:52.0946626Z,Shifting ladder up to start 21.80
+2025-07-24T02:23:52.0947318Z,Placing ladder from 21.80
+2025-07-24T02:23:52.2037754Z,Shifting ladder up to start 21.81
+2025-07-24T02:23:52.2038590Z,Placing ladder from 21.81
+2025-07-24T02:23:52.4383149Z,Shifting ladder up to start 21.82
+2025-07-24T02:23:52.4385274Z,Placing ladder from 21.82
+2025-07-24T02:23:52.4538520Z,Shifting ladder up to start 21.83
+2025-07-24T02:23:52.4539745Z,Placing ladder from 21.83
+2025-07-24T02:23:52.4696595Z,Shifting ladder up to start 21.84
+2025-07-24T02:23:52.4697260Z,Placing ladder from 21.84
+2025-07-24T02:23:52.5479424Z,Shifting ladder up to start 21.85
+2025-07-24T02:23:52.5481144Z,Placing ladder from 21.85
+2025-07-24T02:23:52.5938182Z,Shifting ladder up to start 21.86
+2025-07-24T02:23:52.5939106Z,Placing ladder from 21.86
+2025-07-24T02:23:52.7056345Z,Shifting ladder up to start 21.87
+2025-07-24T02:23:52.7057092Z,Placing ladder from 21.87
+2025-07-24T02:23:52.7992878Z,Shifting ladder up to start 21.88
+2025-07-24T02:23:52.7994600Z,Placing ladder from 21.88
+2025-07-24T02:23:52.8955093Z,Shifting ladder up to start 21.89
+2025-07-24T02:23:52.8955900Z,Placing ladder from 21.89
+2025-07-24T02:23:52.9415214Z,Shifting ladder up to start 21.90
+2025-07-24T02:23:52.9415825Z,Placing ladder from 21.90
+2025-07-24T02:23:53.0188515Z,Shifting ladder up to start 21.91
+2025-07-24T02:23:53.0190706Z,Placing ladder from 21.91
+2025-07-24T02:23:53.0502661Z,Shifting ladder up to start 21.92
+2025-07-24T02:23:53.0503524Z,Placing ladder from 21.92
+2025-07-24T02:23:53.0959561Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:53.1118616Z,Placing ladder from 21.92
+2025-07-24T02:23:53.1267514Z,Shifting ladder up to start 21.93
+2025-07-24T02:23:53.1269681Z,Placing ladder from 21.93
+2025-07-24T02:23:53.1420360Z,Shifting ladder up to start 21.94
+2025-07-24T02:23:53.1421433Z,Placing ladder from 21.94
+2025-07-24T02:23:53.1893602Z,Shifting ladder up to start 21.95
+2025-07-24T02:23:53.1894033Z,Placing ladder from 21.95
+2025-07-24T02:23:53.2049161Z,Shifting ladder up to start 21.95
+2025-07-24T02:23:53.2050950Z,Placing ladder from 21.95
+2025-07-24T02:23:53.2509143Z,Shifting ladder up to start 21.96
+2025-07-24T02:23:53.2510149Z,Placing ladder from 21.96
+2025-07-24T02:23:53.4232056Z,Shifting ladder up to start 21.97
+2025-07-24T02:23:53.4233276Z,Placing ladder from 21.97
+2025-07-24T02:23:53.4863778Z,Shifting ladder up to start 21.98
+2025-07-24T02:23:53.4864471Z,Placing ladder from 21.98
+2025-07-24T02:23:53.5475669Z,Flattening 119 @ market (bid=21.99, vwap=21.89)
+2025-07-24T02:23:53.5477052Z,Shifting ladder up to start 21.99
+2025-07-24T02:23:53.5479063Z,Placing ladder from 21.99
+2025-07-24T02:23:53.6877770Z,Shifting ladder up to start 22.00
+2025-07-24T02:23:53.6878091Z,Placing ladder from 22.00
+2025-07-24T02:23:53.9538594Z,Shifting ladder up to start 22.01
+2025-07-24T02:23:53.9541789Z,Placing ladder from 22.01
+2025-07-24T02:23:54.2970477Z,Shifting ladder up to start 22.02
+2025-07-24T02:23:54.2971248Z,Placing ladder from 22.02
+2025-07-24T02:23:54.3592961Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:54.3757094Z,Placing ladder from 22.00
+2025-07-24T02:23:54.3913964Z,Shifting ladder up to start 22.01
+2025-07-24T02:23:54.3915304Z,Placing ladder from 22.01
+2025-07-24T02:23:54.4543036Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:54.4696925Z,Placing ladder from 22.00
+2025-07-24T02:23:54.5775225Z,Shifting ladder up to start 22.01
+2025-07-24T02:23:54.5776168Z,Placing ladder from 22.01
+2025-07-24T02:23:54.7792719Z,Shifting ladder up to start 22.02
+2025-07-24T02:23:54.7793474Z,Placing ladder from 22.02
+2025-07-24T02:23:54.7944490Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:54.8101270Z,Placing ladder from 22.02
+2025-07-24T02:23:54.9989338Z,Shifting ladder up to start 22.03
+2025-07-24T02:23:54.9991008Z,Placing ladder from 22.03
+2025-07-24T02:23:55.0615199Z,Shifting ladder up to start 22.04
+2025-07-24T02:23:55.0616664Z,Placing ladder from 22.04
+2025-07-24T02:23:55.1402589Z,Shifting ladder up to start 22.05
+2025-07-24T02:23:55.1403292Z,Placing ladder from 22.05
+2025-07-24T02:23:55.2187734Z,Shifting ladder up to start 22.06
+2025-07-24T02:23:55.2189304Z,Placing ladder from 22.06
+2025-07-24T02:23:55.5141175Z,Shifting ladder up to start 22.07
+2025-07-24T02:23:55.5142276Z,Placing ladder from 22.07
+2025-07-24T02:23:55.5450482Z,Shifting ladder up to start 22.08
+2025-07-24T02:23:55.5451224Z,Placing ladder from 22.08
+2025-07-24T02:23:55.6878247Z,Shifting ladder up to start 22.09
+2025-07-24T02:23:55.6879762Z,Placing ladder from 22.09
+2025-07-24T02:23:55.7027794Z,Shifting ladder down to start 22.08
+2025-07-24T02:23:55.7029444Z,Placing ladder from 22.08
+2025-07-24T02:23:55.7177887Z,Shifting ladder up to start 22.09
+2025-07-24T02:23:55.7179071Z,Placing ladder from 22.09
+2025-07-24T02:23:56.0614913Z,Shifting ladder up to start 22.10
+2025-07-24T02:23:56.0615626Z,Placing ladder from 22.10
+2025-07-24T02:23:56.2486989Z,Shifting ladder up to start 22.11
+2025-07-24T02:23:56.2488066Z,Placing ladder from 22.11
+2025-07-24T02:23:56.4367254Z,Shifting ladder up to start 22.12
+2025-07-24T02:23:56.4369299Z,Placing ladder from 22.12
+2025-07-24T02:23:56.5923214Z,Shifting ladder up to start 22.13
+2025-07-24T02:23:56.5924589Z,Placing ladder from 22.13
+2025-07-24T02:23:56.6236960Z,Shifting ladder up to start 22.14
+2025-07-24T02:23:56.6237314Z,Placing ladder from 22.14
+2025-07-24T02:23:56.6861990Z,Shifting ladder up to start 22.15
+2025-07-24T02:23:56.6863439Z,Placing ladder from 22.15
+2025-07-24T02:23:56.7946214Z,Shifting ladder up to start 22.16
+2025-07-24T02:23:56.7948022Z,Placing ladder from 22.16
+2025-07-24T02:23:56.9511218Z,Shifting ladder up to start 22.17
+2025-07-24T02:23:56.9512610Z,Placing ladder from 22.17
+2025-07-24T02:23:57.0760945Z,Got touched ‑ cancelling ladder to stay flat
+2025-07-24T02:23:57.0908389Z,Placing ladder from 22.17
+2025-07-24T02:23:57.1066892Z,Shifting ladder up to start 22.18
+2025-07-24T02:23:57.1067510Z,Placing ladder from 22.18
+2025-07-24T02:23:57.1372086Z,Flattening 229 @ market (bid=22.19, vwap=22.09)
+2025-07-24T02:23:57.1372912Z,Shifting ladder up to start 22.19
+2025-07-24T02:23:57.1373345Z,Placing ladder from 22.19
+2025-07-24T02:23:57.3241728Z,Shifting ladder up to start 22.20
+2025-07-24T02:23:57.3243826Z,Placing ladder from 22.20
+2025-07-24T02:23:57.3717905Z,Shifting ladder up to start 22.21
+2025-07-24T02:23:57.3718902Z,Placing ladder from 22.21
+2025-07-24T02:23:57.4501528Z,Shifting ladder up to start 22.22
+2025-07-24T02:23:57.4504001Z,Placing ladder from 22.22
+2025-07-24T02:23:57.5127055Z,Shifting ladder up to start 22.23
+2025-07-24T02:23:57.5128144Z,Placing ladder from 22.23
+2025-07-24T02:23:57.5442527Z,Shifting ladder up to start 22.24
+2025-07-24T02:23:57.5443512Z,Placing ladder from 22.24
+2025-07-24T02:23:57.5596106Z,Shifting ladder up to start 22.25
+2025-07-24T02:23:57.5597416Z,Placing ladder from 22.25
+2025-07-24T02:23:57.6375472Z,Shifting ladder up to start 22.26
+2025-07-24T02:23:57.6377410Z,Placing ladder from 22.26
+2025-07-24T02:23:57.7633528Z,Shifting ladder up to start 22.27
+2025-07-24T02:23:57.7634710Z,Placing ladder from 22.27
+2025-07-24T02:23:57.7786936Z,Shifting ladder up to start 22.28
+2025-07-24T02:23:57.7787876Z,Placing ladder from 22.28
+2025-07-24T02:23:58.0119764Z,Shifting ladder up to start 22.29
+2025-07-24T02:23:58.0121199Z,Placing ladder from 22.29
+2025-07-24T02:23:58.0278463Z,Shifting ladder up to start 22.30
+2025-07-24T02:23:58.0279892Z,Placing ladder from 22.30
+2025-07-24T02:23:58.0740829Z,Shifting ladder up to start 22.31
+2025-07-24T02:23:58.0741435Z,Placing ladder from 22.31
+2025-07-24T02:23:58.2151558Z,Shifting ladder up to start 22.32
+2025-07-24T02:23:58.2152875Z,Placing ladder from 22.32
+2025-07-24T02:23:58.4187076Z,Shifting ladder up to start 22.33
+2025-07-24T02:23:58.4188807Z,Placing ladder from 22.33
+2025-07-24T02:23:58.5434600Z,Shifting ladder up to start 22.34
+2025-07-24T02:23:58.5435411Z,Placing ladder from 22.34
+2025-07-24T02:23:58.6529909Z,Shifting ladder up to start 22.35
+2025-07-24T02:23:58.6533990Z,Placing ladder from 22.35
+2025-07-24T02:23:58.9645836Z,Shifting ladder up to start 22.36
+2025-07-24T02:23:58.9646833Z,Placing ladder from 22.36
