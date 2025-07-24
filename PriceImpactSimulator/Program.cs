@@ -4,7 +4,6 @@ using PriceImpactSimulator.StrategyApi;
 using PriceImpactSimulator.Strategies;
 using PriceImpactSimulator.Engine;
 
-// simulation tick aligned with README specification
 var step = TimeSpan.FromMilliseconds(10);
 
 var ctx = new StrategyContext
@@ -29,21 +28,9 @@ var simParams = new MarketSimulator.SimParams(
     LogNormMu:     7,
     LogNormSigma:  1.1,
     Seed:          37);
-/*    TrendLookback: 150,
-    PriceLookback: 5,
-    K1Imbalance: 0.18,
-    K2Trend    : 0.65,
-    K3PriceDev : 0.70,*/
 var ladder = new LadderLiftStrategy();
 var drip   = new DripFlipStrategy();
 
-//var schedule = new[]
-//{
-//    new StrategyWindow(ladder,  30, 10),
-//    new StrategyWindow(drip,   10, 10),
-//    new StrategyWindow(ladder, 49, 10),
-//    new StrategyWindow(drip , 49, 10),
-//};
 
 var schedule = new[]
 {

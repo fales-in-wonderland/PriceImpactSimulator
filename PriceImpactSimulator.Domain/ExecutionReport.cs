@@ -1,9 +1,9 @@
-﻿// File: ExecutionReport.cs
+
 namespace PriceImpactSimulator.Domain;
 
 public enum ExecType { New, Trade, Cancel, Reject }
 
-/// <summary>Fill / state‑change notification delivered to a strategy.</summary>
+// Fill or cancel report sent to the strategy
 public sealed record ExecutionReport
 (
     Guid         OrderId,

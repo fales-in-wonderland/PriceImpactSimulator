@@ -2,7 +2,7 @@
 
 namespace PriceImpactSimulator.StrategyApi;
 
-/// <summary>Instruction returned by a strategy, to be consumed by the engine.</summary>
+// Command produced by a strategy
 public sealed record OrderCommand
 (
     CommandType Type,
