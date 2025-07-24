@@ -1,5 +1,7 @@
-﻿# Price Impact Simulator Summary
+# Price Impact Simulator Summary
 
 This repository implements a simple trading simulator and sample strategies for the HighVoltageTrading assignment. The simulation run saved its logs and an interactive report in the `results` folder.
 
 [Open analysis report](results/report_20250724_013841.html)
+
+<iframe src="results/report_20250724_013841.html" style="width:100%; height:600px;"></iframe>
