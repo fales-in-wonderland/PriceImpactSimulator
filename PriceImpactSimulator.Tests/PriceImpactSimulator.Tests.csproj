@@ -13,8 +13,9 @@
       <PackageReference Include="xunit.extensibility.execution" Version="2.9.3" />
     </ItemGroup>
 
-    <ItemGroup>
+  <ItemGroup>
       <ProjectReference Include="..\PriceImpactSimulator.Engine\PriceImpactSimulator.Engine.csproj" />
-    </ItemGroup>
+      <ProjectReference Include="..\PriceImpactSimulator.Strategies\PriceImpactSimulator.Strategies.csproj" />
+  </ItemGroup>
 
 </Project>

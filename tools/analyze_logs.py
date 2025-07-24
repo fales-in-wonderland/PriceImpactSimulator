@@ -11,12 +11,11 @@ import plotly.io as pio
 LOG_DIR         = Path(r"..\PriceImpactSimulator\bin\Debug\net9.0\logs").resolve()
 CANDLE_INTERVAL = "1S"
 
-# ---------- helper: last run stamp --------------------------------------
 def latest_stamp() -> str:
     books = sorted(LOG_DIR.glob("book_*.csv"), key=os.path.getmtime)
     if not books:
         raise RuntimeError(f"no logs in {LOG_DIR}")
-    return books[-1].stem.split("_", 1)[1]          # 20250723_150619
+    return books[-1].stem.split("_", 1)[1]
 
 STAMP = latest_stamp()
 
@@ -26,9 +25,7 @@ def path(kind: str) -> Path:
         raise FileNotFoundError(p)
     return p
 
-# ---------- loading ------------------------------------------------------
 def load():
-    # ---- book (aggregate best‑10) --------------------------------------
     rows, snap, ts_re = [], {}, re.compile(r"^\d{4}-\d\d-\d\dT\d\d:\d\d")
     with path("book").open() as fh:
         for ln in fh:
@@ -50,7 +47,6 @@ def load():
     book["ts"]  = pd.to_datetime(book.ts)
     book["imb"] = (book.bqty-book.aqty)/(book.bqty+book.aqty).replace(0,pd.NA)
 
-    # ---- trades ---------------------------------------------------------
     trades = pd.read_csv(path("trades"), parse_dates=["ts"])
     trades.qty = trades.qty.astype(int)
     buys, sells = [g.copy() for _,g in trades.groupby(trades.side)]
@@ -61,11 +57,9 @@ def load():
     vol_s = sells.set_index("ts").qty.resample(CANDLE_INTERVAL).sum().rename("sellVol")
     vol   = pd.concat([vol_b, vol_s], axis=1).fillna(0)
 
-    # ---- stats ----------------------------------------------------------
     stats = pd.read_csv(path("stats"), parse_dates=["ts"]).astype(
         {"buyPower":float,"position":int,"vwap":float,"pnl":float})
 
-    # ---- strategy windows ----------------------------------------------
     ev = pd.read_csv(path("strategy_events"), parse_dates=["ts"]).sort_values("ts")
     windows = []
     for strat, grp in ev.groupby("strategy"):
@@ -79,7 +73,6 @@ def load():
     tl = pd.DataFrame(windows, columns=["strategy","start","end"])
     return book, ohlc, vol, stats, tl
 
-# ---------- figure -------------------------------------------------------
 def build_fig(book, ohlc, vol, stats, tl):
     fig = make_subplots(
         rows=3, cols=1, shared_xaxes=True,
@@ -92,7 +85,6 @@ def build_fig(book, ohlc, vol, stats, tl):
                         "Market depth & tape",
                         "Strategy metrics"))
 
-    # ─ candles ─
     fig.add_trace(go.Candlestick(
         x=ohlc.index, open=ohlc.open, high=ohlc.high,
         low=ohlc.low, close=ohlc.close,
@@ -101,7 +93,6 @@ def build_fig(book, ohlc, vol, stats, tl):
         name="OHLC", showlegend=False),
         row=1,col=1)
 
-    # ─ imbalance + volumes ─
     fig.add_trace(go.Scatter(
         x=book.ts, y=book.imb, mode="lines",
         name="Imbalance", line=dict(color="#F5A623", width=1.3)),
@@ -115,7 +106,6 @@ def build_fig(book, ohlc, vol, stats, tl):
         marker_color="rgba(255,65,54,0.55)"),
         row=2,col=1,secondary_y=True)
 
-    # ─ BP / Pos / PnL ─
     fig.add_trace(go.Scatter(
         x=stats.ts, y=stats.buyPower, name="Buy‑Power €",
         line=dict(color="#1f77b4")),
@@ -129,7 +119,6 @@ def build_fig(book, ohlc, vol, stats, tl):
         line=dict(color="#17becf", dash="dash")),
         row=3,col=1,secondary_y=True)
 
-    # ─ strategy windows as background + labels ─
     palette = {"LadderLiftStrategy":"#ffaa00",
                "DripFlipStrategy":"#00d2d5"}
     offsets = {s:0.96-i*0.03 for i,s in enumerate(tl.strategy.unique())}
@@ -145,7 +134,6 @@ def build_fig(book, ohlc, vol, stats, tl):
                            font=dict(size=11,color=color),
                            bgcolor="rgba(0,0,0,0.45)", opacity=0.85)
 
-    # ─ layout tweaks ─
     max_vol = max(vol.buyVol.max(), vol.sellVol.max())
     fig.update_yaxes(range=[-max_vol*1.1,max_vol*1.1],
                      row=2,col=1,secondary_y=True)
@@ -163,7 +151,6 @@ def build_fig(book, ohlc, vol, stats, tl):
 
     return fig
 
-# ---------- main ---------------------------------------------------------
 if __name__ == "__main__":
     book, ohlc, vol, stats, tl = load()
     fig = build_fig(book, ohlc, vol, stats, tl)

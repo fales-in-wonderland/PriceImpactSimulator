@@ -1,11 +1,11 @@
-﻿// File: IStrategy.cs
+
 using System;
 using System.Collections.Generic;
 using PriceImpactSimulator.Domain;
 
 namespace PriceImpactSimulator.StrategyApi;
 
-/// <summary>Pluggable algorithm contract; engine calls the three methods in order.</summary>
+// Strategy contract used by the engine
 public interface IStrategy
 {
     void Initialize(in StrategyContext ctx);
