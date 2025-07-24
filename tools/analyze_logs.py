@@ -1,198 +1,166 @@
-"""
-tools/analyze_logs.py  – dark dashboard + strategy‑timeline
------------------------------------------------------------
-"""
-
-import glob, os, re, webbrowser
+from __future__ import annotations
+import os, re, glob, webbrowser
 from pathlib import Path
-from itertools import cycle
 
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 import plotly.io as pio
 
-LOG_DIR          = Path(r"..\PriceImpactSimulator\bin\Debug\net9.0\logs").resolve()
-CANDLE_INTERVAL  = "1S"
+# ————————————————————————————————————————————————————————————
+LOG_DIR         = Path(r"..\PriceImpactSimulator\bin\Debug\net9.0\logs").resolve()
+CANDLE_INTERVAL = "1S"
 
-# ---------- helper: choose latest run ------------------------------------
+# ---------- helper: last run stamp --------------------------------------
 def latest_stamp() -> str:
-    # берём любой book_*.csv, вытаскиваем хвост после _
-    book_files = sorted(LOG_DIR.glob("book_*.csv"), key=os.path.getmtime)
-    if not book_files:
-        raise RuntimeError("no log files found")
-    return book_files[-1].stem.split("_", 1)[1]      # e.g. 20250723_150619
+    books = sorted(LOG_DIR.glob("book_*.csv"), key=os.path.getmtime)
+    if not books:
+        raise RuntimeError(f"no logs in {LOG_DIR}")
+    return books[-1].stem.split("_", 1)[1]          # 20250723_150619
 
-RUN_STAMP = latest_stamp()
+STAMP = latest_stamp()
 
-def file(name: str) -> Path:
-    path = LOG_DIR / f"{name}_{RUN_STAMP}.csv"
-    if not path.exists():
-        raise FileNotFoundError(path)
-    return path
+def path(kind: str) -> Path:
+    p = LOG_DIR / f"{kind}_{STAMP}.csv"
+    if not p.exists():
+        raise FileNotFoundError(p)
+    return p
 
-# ---------- load & wrangle ----------------------------------------------
+# ---------- loading ------------------------------------------------------
 def load():
-    # --- order‑book (aggregate best 10 lvls per snap) --------------------
+    # ---- book (aggregate best‑10) --------------------------------------
     rows, snap, ts_re = [], {}, re.compile(r"^\d{4}-\d\d-\d\dT\d\d:\d\d")
-    with file("book").open() as fh:
+    with path("book").open() as fh:
         for ln in fh:
-            if not ts_re.match(ln):
-                continue
-            ts, bp, bq, ap, aq = ln.strip().split(",")
+            if not ts_re.match(ln): continue
+            ts, bp,bq, ap,aq = ln.strip().split(",")
             if snap.get("ts") and ts != snap["ts"]:
                 rows.append(snap.copy()); snap.clear()
             snap.setdefault("ts", ts)
             if bp:
                 snap["bb"]   = float(bp)
-                snap["bqty"] = snap.get("bqty", 0) + int(bq)
+                snap["bqty"] = snap.get("bqty",0)+int(bq)
             if ap:
                 snap["ba"]   = float(ap)
-                snap["aqty"] = snap.get("aqty", 0) + int(aq)
+                snap["aqty"] = snap.get("aqty",0)+int(aq)
         if snap: rows.append(snap)
-    book = pd.DataFrame(rows).astype({"bb":float,"ba":float,"bqty":int,"aqty":int})
-    book["ts"] = pd.to_datetime(book.ts)
-    book["imb"] = (book.bqty - book.aqty) / (book.bqty + book.aqty).replace(0, pd.NA)
+    book = pd.DataFrame(rows).fillna({"bqty":0,"aqty":0})
+    for c in ("bb","ba"):  book[c] = book[c].astype(float)
+    for c in ("bqty","aqty"): book[c] = book[c].astype("Int64")
+    book["ts"]  = pd.to_datetime(book.ts)
+    book["imb"] = (book.bqty-book.aqty)/(book.bqty+book.aqty).replace(0,pd.NA)
 
-    # --- trades ----------------------------------------------------------
-    trades = pd.read_csv(file("trades"), parse_dates=["ts"])
+    # ---- trades ---------------------------------------------------------
+    trades = pd.read_csv(path("trades"), parse_dates=["ts"])
     trades.qty = trades.qty.astype(int)
-    buys, sells = [df.copy() for _, df in trades.groupby(trades.side)]
+    buys, sells = [g.copy() for _,g in trades.groupby(trades.side)]
 
-    # --- candles + per‑sec volume ---------------------------------------
-    ohlc = (trades
-            .set_index("ts")
-            .price
-            .resample(CANDLE_INTERVAL)
-            .ohlc())
+    ohlc = (trades.set_index("ts").price
+            .resample(CANDLE_INTERVAL).ohlc())
     vol_b = buys .set_index("ts").qty.resample(CANDLE_INTERVAL).sum().rename("buyVol")
     vol_s = sells.set_index("ts").qty.resample(CANDLE_INTERVAL).sum().rename("sellVol")
     vol   = pd.concat([vol_b, vol_s], axis=1).fillna(0)
 
-    # --- stats -----------------------------------------------------------
-    stats = pd.read_csv(file("stats"), parse_dates=["ts"]).astype(
+    # ---- stats ----------------------------------------------------------
+    stats = pd.read_csv(path("stats"), parse_dates=["ts"]).astype(
         {"buyPower":float,"position":int,"vwap":float,"pnl":float})
 
-    # --- strategy events -------------------------------------------------
-    ev = pd.read_csv(file("strategy_events"), parse_dates=["ts"])
-    ev = ev.sort_values("ts")
-
-    # строим интервалы [on, off) для каждой стратегии
-    intervals = []
+    # ---- strategy windows ----------------------------------------------
+    ev = pd.read_csv(path("strategy_events"), parse_dates=["ts"]).sort_values("ts")
+    windows = []
     for strat, grp in ev.groupby("strategy"):
-        grp = grp.reset_index(drop=True)
         start = None
         for _, row in grp.iterrows():
-            if row.event == 1 and start is None:
-                start = row.ts
-            elif row.event == 0 and start is not None:
-                intervals.append(dict(strategy=strat,
-                                      start=start,
-                                      end=row.ts))
-                start = None
-        # закрываем висящий «ON», если OFF не пришёл
+            if row.event==1 and start is None: start=row.ts
+            elif row.event==0 and start is not None:
+                windows.append((strat,start,row.ts)); start=None
         if start is not None:
-            intervals.append(dict(strategy=strat,
-                                  start=start,
-                                  end=ev.ts.max()))
-    timeline = pd.DataFrame(intervals)
+            windows.append((strat,start,ev.ts.max()))
+    tl = pd.DataFrame(windows, columns=["strategy","start","end"])
+    return book, ohlc, vol, stats, tl
 
-    return book, ohlc, vol, stats, timeline
-
-# ---------- plotting -----------------------------------------------------
-def build_fig(book, ohlc, vol, stats, timeline):
+# ---------- figure -------------------------------------------------------
+def build_fig(book, ohlc, vol, stats, tl):
     fig = make_subplots(
-        rows=4, cols=1, shared_xaxes=True,
-        row_heights=[0.40, 0.25, 0.23, 0.12],  # ↑ timeline выше
+        rows=3, cols=1, shared_xaxes=True,
+        row_heights=[0.50,0.27,0.23],
         vertical_spacing=0.03,
-        specs=[[{"secondary_y": False}],
-               [{"secondary_y": True}],
-               [{"secondary_y": True}],
-               [{"secondary_y": False}]],
+        specs=[[{"secondary_y":False}],
+               [{"secondary_y":True}],
+               [{"secondary_y":True}]],
         subplot_titles=("Price – 1 s candles",
                         "Market depth & tape",
-                        "Strategy metrics",
-                        "Strategy timeline"))
+                        "Strategy metrics"))
 
-    # ── Row‑1 : candles ──────────────────────────────────────────────────
+    # ─ candles ─
     fig.add_trace(go.Candlestick(
         x=ohlc.index, open=ohlc.open, high=ohlc.high,
-        low =ohlc.low , close=ohlc.close,
+        low=ohlc.low, close=ohlc.close,
         increasing_line_color="#26e665",
         decreasing_line_color="#ff4136",
         name="OHLC", showlegend=False),
-        row=1, col=1)
+        row=1,col=1)
 
-    # ── Row‑2 : imbalance + volume ───────────────────────────────────────
+    # ─ imbalance + volumes ─
     fig.add_trace(go.Scatter(
         x=book.ts, y=book.imb, mode="lines",
         name="Imbalance", line=dict(color="#F5A623", width=1.3)),
-        row=2, col=1, secondary_y=False)
-
+        row=2,col=1,secondary_y=False)
     fig.add_trace(go.Bar(
-        x=vol.index, y=vol.buyVol, name="Buy vol",
+        x=vol.index, y=vol.buyVol, name="Buy vol",
         marker_color="rgba(38,230,101,0.55)"),
-        row=2, col=1, secondary_y=True)
+        row=2,col=1,secondary_y=True)
     fig.add_trace(go.Bar(
-        x=vol.index, y=-vol.sellVol, name="Sell vol",
+        x=vol.index, y=-vol.sellVol, name="Sell vol",
         marker_color="rgba(255,65,54,0.55)"),
-        row=2, col=1, secondary_y=True)
+        row=2,col=1,secondary_y=True)
 
-    # ── Row‑3 : BP / Position / PnL ──────────────────────────────────────
+    # ─ BP / Pos / PnL ─
     fig.add_trace(go.Scatter(
         x=stats.ts, y=stats.buyPower, name="Buy‑Power €",
         line=dict(color="#1f77b4")),
-        row=3, col=1, secondary_y=False)
-
+        row=3,col=1,secondary_y=False)
     fig.add_trace(go.Scatter(
         x=stats.ts, y=stats.position, name="Position",
         line=dict(color="#ff7f0e", dash="dot")),
-        row=3, col=1, secondary_y=True)
+        row=3,col=1,secondary_y=True)
     fig.add_trace(go.Scatter(
         x=stats.ts, y=stats.pnl, name="PnL €",
         line=dict(color="#17becf", dash="dash")),
-        row=3, col=1, secondary_y=True)
+        row=3,col=1,secondary_y=True)
 
-    # ── Row‑4 : strategy‑timeline ────────────────────────────────────────
-    # build categorical Y axis
-    strategies = timeline.strategy.unique().tolist()
-    fig.update_yaxes(type="category",
-                     categoryorder="array",
-                     categoryarray=strategies,
-                     row=4, col=1)
+    # ─ strategy windows as background + labels ─
+    palette = {"LadderLiftStrategy":"#ffaa00",
+               "DripFlipStrategy":"#00d2d5"}
+    offsets = {s:0.96-i*0.03 for i,s in enumerate(tl.strategy.unique())}
+    for strat,start,end in tl.itertuples(index=False):
+        color = palette.get(strat,"#888")
+        fig.add_vrect(x0=start, x1=end,
+                      fillcolor=color, opacity=0.12,
+                      line_width=0, layer="below", col=1, row="all")
+        mid = start + (end-start)/2
+        fig.add_annotation(x=mid, y=offsets[strat], xref="x",
+                           yref="paper", text=strat,
+                           showarrow=False,
+                           font=dict(size=11,color=color),
+                           bgcolor="rgba(0,0,0,0.45)", opacity=0.85)
 
-    palette = {"LadderLiftStrategy": "#ffaa00",
-               "DripFlipStrategy": "#00d2d5"}
-    for _, row in timeline.iterrows():
-        color = palette.get(row.strategy, "#888")
-        fig.add_trace(go.Scatter(
-            x=[row.start, row.end],
-            y=[row.strategy, row.strategy],
-            mode="lines",
-            line=dict(color=color, width=14),
-            hoverinfo="text",
-            text=f"{row.strategy}: {row.start.time()} ➜ {row.end.time()}",
-            showlegend=False),
-            row=4, col=1)
-
-    # ── common layout tweaks ─────────────────────────────────────────────
+    # ─ layout tweaks ─
     max_vol = max(vol.buyVol.max(), vol.sellVol.max())
-    fig.update_yaxes(range=[-max_vol*1.1, max_vol*1.1],
-                     row=2, col=1, secondary_y=True)
-    fig.update_yaxes(title_text="Imb.", row=2, col=1, secondary_y=False)
-    fig.update_yaxes(showticklabels=False, row=4, col=1)
+    fig.update_yaxes(range=[-max_vol*1.1,max_vol*1.1],
+                     row=2,col=1,secondary_y=True)
+    fig.update_yaxes(title_text="Imb.", row=2,col=1,secondary_y=False)
 
-    fig.update_layout(
-        template="plotly_dark",
-        xaxis_rangeslider_visible=False,
-        paper_bgcolor="#000", plot_bgcolor="#000",
-        bargap=0.05, height=1000, width=1550,
-        margin=dict(l=60, r=30, t=60, b=60),
-        legend_orientation="h",
-        legend_yanchor="bottom", legend_y=1.02,
-        legend_x=1, legend_xanchor="right",
-        title=f"PriceImpactSimulator – run {RUN_STAMP}"
-    )
+    fig.update_layout(template="plotly_dark",
+                      xaxis_rangeslider_visible=False,
+                      paper_bgcolor="#000", plot_bgcolor="#000",
+                      bargap=0.05, height=900, width=1550,
+                      margin=dict(l=60,r=30,t=60,b=60),
+                      legend_orientation="h",
+                      legend_yanchor="bottom", legend_y=1.02,
+                      legend_x=1, legend_xanchor="right",
+                      title=f"PriceImpactSimulator – run {STAMP}")
+
     return fig
 
 # ---------- main ---------------------------------------------------------
@@ -200,11 +168,11 @@ if __name__ == "__main__":
     book, ohlc, vol, stats, tl = load()
     fig = build_fig(book, ohlc, vol, stats, tl)
 
-    out_html = LOG_DIR / f"report_{RUN_STAMP}.html"
+    out = LOG_DIR / f"report_{STAMP}.html"
     html = pio.to_html(fig, include_plotlyjs="cdn", full_html=True)
     html = html.replace(
         "<head>",
         "<head><style>body{background:#000;margin:0;color:#ddd;font-family:Arial,Helvetica,sans-serif}</style>")
-    out_html.write_text(html, encoding="utf-8")
-    webbrowser.open(out_html.as_uri())
-    print(f"Saved {out_html}")
+    out.write_text(html, encoding="utf-8")
+    webbrowser.open(out.as_uri())
+    print("saved", out)
