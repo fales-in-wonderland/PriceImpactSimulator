@@ -247,8 +247,6 @@ public sealed class OrderBook
         };
     }
 
-    #endregion
-
     private sealed class DescComparer : IComparer<decimal>
     {
         public int Compare(decimal x, decimal y) => y.CompareTo(x);
