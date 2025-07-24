@@ -4,4 +4,4 @@ This repository implements a simple trading simulator and sample strategies for 
 
 [Open analysis report](results/report_20250724_013841.html)
 
-<iframe src="results/report_20250724_013841.html" style="width:100%; height:600px;"></iframe>
+<a href="results/report_20250724_013841.html" target="_blank">Open report in browser</a>
