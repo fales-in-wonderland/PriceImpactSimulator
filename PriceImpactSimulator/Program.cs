@@ -45,8 +45,8 @@ var scheduler = new Scheduler(schedule);
 
 var runner = new SimulationRunner(
     scheduler,
-    simParams, ctx, "logs");
+    simParams, ctx, "results");
 
 runner.Run(TimeSpan.FromMinutes(3));
 
-Console.WriteLine("Simulation finished. CSV logs are in ./logs");
+Console.WriteLine("Simulation finished. CSV logs are in ./results");

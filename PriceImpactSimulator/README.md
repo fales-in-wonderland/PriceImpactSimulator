@@ -19,10 +19,18 @@ Strategies implement a simple interface and are executed by the simulation host.
 dotnet run --project PriceImpactSimulator
 ```
 
-Logs appear in `./logs`.
+Logs appear in `./results` when using the default parameters.
 
 ## Tests
 
 ```bash
 dotnet test
 ```
+
+The repository also ships a small log viewer requiring Python 3 with `pandas` and `plotly`:
+
+```bash
+python tools/analyze_logs.py
+```
+
+See [`results/report_20250724_011030.html`](../results/report_20250724_011030.html) for an example output.

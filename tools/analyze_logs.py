@@ -8,7 +8,8 @@ from plotly.subplots import make_subplots
 import plotly.io as pio
 
 # Simple log visualisation
-LOG_DIR = Path(r"..\PriceImpactSimulator\bin\Debug\net9.0\logs").resolve()
+# Analyse CSV files located in the repository's results folder
+LOG_DIR = Path("../results").resolve()
 CANDLE_INTERVAL = "1S"
 
 def latest_stamp() -> str:
