@@ -6,20 +6,24 @@ using PriceImpactSimulator.StrategyApi;
 
 namespace PriceImpactSimulator.Strategies;
 
+// Стратегия размещает «лестницу» лимитных заявок на покупку и
+// двигает её вслед за рынком, пока не получит сделку.
 public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
 {
-    private StrategyContext _ctx = null!;
-    private DateTime _startTime;
+    private StrategyContext _ctx = null!;                        // окружение симуляции
+    private DateTime _startTime;                                 // время запуска
 
+    // Активные лимитные заявки стратегии
     private readonly List<(Guid id, decimal price, int qty)> _orders = new();
 
-    private decimal _lastBestBid;
-    private decimal _lastMid;
+    private decimal _lastBestBid;                                // последняя лучшая цена покупки
+    private decimal _lastMid;                                    // средняя цена рынка
 
-    private int _position;
-    private decimal _vwap;
-    private decimal _bpOrders;
+    private int _position;                                       // позиция после исполнений
+    private decimal _vwap;                                       // средняя цена позиции
+    private decimal _bpOrders;                                   // объём денег в заявках
 
+    // Метрики для отображения состояния стратегии в отчётах
     public StrategyMetrics Metrics => new(
         BuyingPowerUsed: _bpOrders + _position * _vwap,
         Position: _position,
@@ -27,6 +31,7 @@ public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
         PnL: _position * (_lastMid - (_position > 0 ? _vwap : 0m)),
         RealisedPnL: 0m);
 
+    // Сохраняем контекст и отмечаем стартовое время для логов
     public void Initialize(in StrategyContext ctx)
     {
         _ctx = ctx;
@@ -34,6 +39,7 @@ public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
         _ctx.Logger($"LadderLiftStrategy initialized at {_startTime:O}");
     }
 
+    // Обновляем последние наблюдаемые цены
     public void OnOrderBook(in OrderBookSnapshot snapshot)
     {
         if (snapshot.Bids.Length > 0)
@@ -44,6 +50,7 @@ public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
 
     private readonly Queue<OrderCommand> _pendingCancels = new();
 
+    // Обработка отчетов о заявках. При получении сделки снимаем оставшуюся лестницу
     public void OnExecution(in ExecutionReport report)
     {
         var orderId = report.OrderId;
@@ -80,6 +87,7 @@ public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
         }
     }
 
+    // Генерируем новые приказы каждый тик. Если рынок движется - перемещаем лестницу
     public IReadOnlyList<OrderCommand> GenerateCommands(DateTime utcNow)
     {
         if (_pendingCancels.Count > 0)
@@ -106,6 +114,7 @@ public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
         return Array.Empty<OrderCommand>();
     }
 
+    // Размещаем ступенчатый набор лимитных заявок вниз от указанной цены
     private IReadOnlyList<OrderCommand> PlaceLadder(decimal startPrice)
     {
         _ctx.Logger($"Placing ladder from {startPrice:F2}");
@@ -126,6 +135,7 @@ public sealed class LadderLiftStrategy : IStrategy, IStrategyWithStats
         return cmds;
     }
 
+    // Сдвигаем текущую лестницу на другую цену
     private IReadOnlyList<OrderCommand> ShiftLadder(decimal newStart, string dir)
     {
         _ctx.Logger($"Shifting ladder {dir} to start {newStart:F2}");

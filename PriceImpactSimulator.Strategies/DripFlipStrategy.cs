@@ -5,23 +5,27 @@ using PriceImpactSimulator.StrategyApi;
 
 namespace PriceImpactSimulator.Strategies;
 
-// Buys in small slices and exits on profit or loss
+// Простая стратегия усреднения: покупает актив небольшими порциями и
+// сразу закрывает позицию при достижении цели по прибыли или стоп‑лоссу.
 public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
 {
-    // parameters
+    // --- Параметры стратегии ---
+    // Размер одной покупки
     private const int     SliceQty  = 1;
+    // Цель по прибыли в абсолютных ценовых пунктах
     private const decimal TakeProf  = 0.10m;
+    // Допустимый убыток (стоп‑лосс)
     private const decimal StopLoss  = 0.05m;
 
-    // state
-    private StrategyContext      _ctx = null!;
-    private int                  _pos;
-    private decimal              _vwap;
-    private decimal              _bid;
-    private decimal              _realised;
-    private readonly HashSet<Guid> _liveIds = new();
+    // --- Состояние стратегии ---
+    private StrategyContext      _ctx = null!; // предоставляет доступ к инфраструктуре
+    private int                  _pos;         // текущая позиция
+    private decimal              _vwap;        // средняя цена позиции
+    private decimal              _bid;         // последняя известная лучшая цена покупки
+    private decimal              _realised;    // накопленная реализованная прибыль
+    private readonly HashSet<Guid> _liveIds = new(); // отслеживаем активные заявки
 
-    // public metrics
+    // --- Показатели для мониторинга ---
     public StrategyMetrics Metrics => new(
         BuyingPowerUsed : _pos * _vwap,
         Position        : _pos,
@@ -30,18 +34,21 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
         RealisedPnL     : _realised);
 
     // IStrategy implementation
+    // Получаем ссылку на инфраструктуру и выводим сообщение в лог
     public void Initialize(in StrategyContext ctx)
     {
         _ctx = ctx;
         _ctx.Logger("DripFlipStrategy ready.");
     }
 
+    // Сохраняем текущую лучшую цену покупки для расчёта PnL
     public void OnOrderBook(in OrderBookSnapshot snap)
     {
         if (snap.Bids.Length > 0)
             _bid = snap.Bids[0].Price;
     }
 
+    // Обработка отчётов об исполнении наших заявок
     public void OnExecution(in ExecutionReport rep)
     {
         // ignore reports for other orders
@@ -76,7 +83,7 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
 
     public IReadOnlyList<OrderCommand> GenerateCommands(DateTime nowUtc)
     {
-        // close position if target met
+        // Закрываем позицию по достижению прибыли или стоп‑лосса
         if (_pos > 0 &&
             (_bid >= _vwap + TakeProf || _bid <= _vwap - StopLoss))
         {
@@ -86,7 +93,7 @@ public sealed class DripFlipStrategy : IStrategy, IStrategyWithStats
             return new[] { OrderCommand.New(id, Side.Sell, 0m, _pos) };
         }
 
-        // otherwise buy next slice
+        // Иначе докупаем ещё одну «порцию» по рынку
         var buyId = Guid.NewGuid();
         _liveIds.Add(buyId);
         return new[] { OrderCommand.New(buyId, Side.Buy, 0m, SliceQty) };

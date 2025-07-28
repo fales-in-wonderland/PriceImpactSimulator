@@ -7,11 +7,13 @@ import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 import plotly.io as pio
 
-# Simple log visualisation
+# Простая утилита для визуализации логов симуляции.
+# Ищет последние файлы с данными и строит интерактивный отчёт в HTML.
 LOG_DIR = Path(r"..\PriceImpactSimulator\bin\Debug\net9.0\logs").resolve()
 CANDLE_INTERVAL = "1S"
 
 def latest_stamp() -> str:
+    """Определить метку времени последнего запуска симуляции"""
     books = sorted(LOG_DIR.glob("book_*.csv"), key=os.path.getmtime)
     if not books:
         raise RuntimeError(f"no logs in {LOG_DIR}")
@@ -20,12 +22,14 @@ def latest_stamp() -> str:
 STAMP = latest_stamp()
 
 def path(kind: str) -> Path:
+    """Получить путь к конкретному файлу лога"""
     p = LOG_DIR / f"{kind}_{STAMP}.csv"
     if not p.exists():
         raise FileNotFoundError(p)
     return p
 
 def load():
+    """Загружает все CSV‑файлы и формирует готовые таблицы pandas"""
     rows, snap, ts_re = [], {}, re.compile(r"^\d{4}-\d\d-\d\dT\d\d:\d\d")
     with path("book").open() as fh:
         for ln in fh:
@@ -74,6 +78,7 @@ def load():
     return book, ohlc, vol, stats, tl
 
 def build_fig(book, ohlc, vol, stats, tl):
+    """Строит интерактивную фигуру Plotly по загруженным данным"""
     fig = make_subplots(
         rows=3, cols=1, shared_xaxes=True,
         row_heights=[0.50,0.27,0.23],
@@ -151,6 +156,7 @@ def build_fig(book, ohlc, vol, stats, tl):
 
     return fig
 
+# При запуске как скрипт загружаем данные и открываем HTML отчёт в браузере
 if __name__ == "__main__":
     book, ohlc, vol, stats, tl = load()
     fig = build_fig(book, ohlc, vol, stats, tl)

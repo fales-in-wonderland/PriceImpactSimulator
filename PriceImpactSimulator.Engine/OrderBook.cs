@@ -3,20 +3,26 @@ using PriceImpactSimulator.Domain;
 
 namespace PriceImpactSimulator.Engine;
 
-// Simplified order book
+// Упрощённая реализация книги заявок. Хранит очереди заявок по ценовым уровням
+// и обеспечивает базовые операции: добавление лимитных/рыночных ордеров и их
+// исполнение, а также отмену.
 public sealed class OrderBook
 {
+    // Список заявок на покупку отсортирован по цене по убыванию
     private readonly SortedDictionary<decimal, Queue<Order>> _bids =
         new(new DescComparer());
+    // Список заявок на продажу сортируется по возрастанию цены
     private readonly SortedDictionary<decimal, Queue<Order>> _asks =
         new();
 
+    // Быстрый индекс для поиска ордера по его идентификатору
     private readonly Dictionary<Guid, (decimal price, Side side)> _index = new();
 
     public IEnumerable<Guid> ActiveOrderIds => _index.Keys;
     public decimal? BestBid => _bids.Count != 0 ? _bids.Keys.First() : null;
     public decimal? BestAsk => _asks.Count != 0 ? _asks.Keys.First() : null;
     
+    // Текущая средняя цена (mid), если обе стороны присутствуют
     public decimal? Mid
     {
         get
@@ -30,7 +36,9 @@ public sealed class OrderBook
     internal SortedDictionary<decimal, Queue<Order>> BidsInternal => _bids;
     internal SortedDictionary<decimal, Queue<Order>> AsksInternal => _asks;
 
-    // Adds a limit order and matches against the opposite book
+    // Добавление лимитного ордера. Сначала пытаемся исполнить его сразу
+    // против противоположной стороны книги, после чего необ исполненная часть
+    // попадает в стакан.
     public (IEnumerable<ExecutionReport> execs, IEnumerable<Trade> trades)
         AddLimit(Order order, DateTime ts)
     {
@@ -103,6 +111,8 @@ public sealed class OrderBook
         return (execs, trades);
     }
 
+    // Исполняет рыночный ордер, проходя по стакану до полного исполнения
+    // либо пока есть ликвидность
     private (IEnumerable<ExecutionReport> execs, IEnumerable<Trade> trades)
         ExecuteMarketAggressor(Order aggressor, DateTime ts)
     {
@@ -157,6 +167,8 @@ public sealed class OrderBook
         return book.TryGetValue(price, out var q) ? q.ToArray() : Array.Empty<Order>();
     }
 
+    // Отмена ордера по идентификатору. Если заявка найдена,
+    // формируется отчёт об отмене.
     public IEnumerable<ExecutionReport> Cancel(Guid orderId, DateTime ts)
     {
         if (!_index.TryGetValue(orderId, out var meta))
@@ -183,7 +195,9 @@ public sealed class OrderBook
         else book[price] = kept;
     }
 
-    // Executes a market order
+    // Исполнение рыночного ордера фиксированного объёма. Проходим по ценовым
+    // уровням пока не будет удовлетворён весь объём либо пока не закончится
+    // ликвидность.
     public (IEnumerable<ExecutionReport> execs, IEnumerable<Trade> trades)
         ExecuteMarket(Side side, int qty, DateTime ts)
     {
@@ -226,6 +240,8 @@ public sealed class OrderBook
         return (execs, trades);
     }
 
+    // Снимает слепок стакана на заданную глубину. Используется стратегиями
+    // и для логирования хода симуляции.
     public OrderBookSnapshot Snapshot(DateTime ts, int depthLevels)
     {
         static OrderBookLevel[] TakeLevels(IEnumerable<KeyValuePair<decimal, Queue<Order>>> src, int n)
@@ -247,6 +263,7 @@ public sealed class OrderBook
         };
     }
 
+    // Компаратор для сортировки цен по убыванию. Используется для книги бидов
     private sealed class DescComparer : IComparer<decimal>
     {
         public int Compare(decimal x, decimal y) => y.CompareTo(x);

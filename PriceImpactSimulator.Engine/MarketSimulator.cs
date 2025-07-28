@@ -5,18 +5,28 @@ using PriceImpactSimulator.Domain;
 
 namespace PriceImpactSimulator.Engine;
 
-// Generates random market orders and cancellations
+// Генератор рыночной активности. В каждом тике формирует случайные
+// сделки и заявки, а также поддерживает минимальную ликвидность в книге.
+// Симулятор опирается на параметры `SimParams` и работает поверх `OrderBook`.
 public sealed class MarketSimulator
 {
+    // Книга заявок, в которой совершаются все операции
     private readonly OrderBook _book;
+    // Источник случайных чисел для генерации рыночных событий
     private readonly Random _rng;
+    // Набор параметров симулятора
     private readonly SimParams _p;
+    // Стартовое срединное значение цены для инициализации ликвидности
     private readonly decimal _startMid;
+    // Идентификаторы ордеров, выставленных самим симулятором для поддержания глубины
     private readonly HashSet<Guid> _houseLiquidity = new();
 
+    // Скользящее окно последних сделок для расчёта тренда
     private readonly Queue<Trade> _recentTrades = new();
+    // История средних цен для оценки отклонения цены
     private readonly Queue<decimal> _midHistory = new();
 
+    // Инициализирует симулятор и заполняет стакан начальными уровнями
     public MarketSimulator(OrderBook book, SimParams p)
     {
         _book = book;
@@ -24,6 +34,9 @@ public sealed class MarketSimulator
         _p = p;
         _startMid = p.StartMidPrice;
 
+        // Создаём симметричный стакан из 10 уровней спроса и предложения.
+        // Количество лотов на каждом уровне убывает экспоненциально, что
+        // имитирует более жидкие дальние уровни.
         for (int lvl = 0; lvl < 10; lvl++)
         {
             var vol = (int)Math.Round(_p.Q0 * Math.Exp(-_p.LambdaDepth * lvl));
@@ -42,6 +55,8 @@ public sealed class MarketSimulator
 
 
 
+    // Параметры, управляющие поведением симулятора. Все значения подбираются
+    // эмпирически и задают характеристики рынка и распределение объёмов.
     public record SimParams(
         decimal TickSize,
         decimal StartMidPrice,
@@ -58,25 +73,32 @@ public sealed class MarketSimulator
         int Seed);
 
 
-    // Executes one simulator tick
+    // Выполняет один шаг симуляции. Возвращает отчёты об исполнении ордеров,
+    // списки сделок и отмен. Внутри производится поддержание ликвидности,
+    // случайный выбор направления и типа следующего ордера.
     public (IEnumerable<ExecutionReport> execs,
         IEnumerable<Trade> trades,
         IEnumerable<ExecutionReport> cancels)
         Step(DateTime ts)
     {
+        // Сначала следим, чтобы в книге сохранялась базовая ликвидность
         EnsureLiquidity(ts);
 
+        // Случайно отменяем часть существующих заявок
         var cancelReports = CancelRandom(ts);
 
-        // create a new order
+        // Далее генерируем новый рыночный или лимитный ордер
         var (pbuy, dirSide) = CalcDirectionProb();
         var side = _rng.NextDouble() < pbuy ? Side.Buy : Side.Sell;
 
+        // Объём ордера распределён логнормально, что даёт реалистичные хвосты
         var qty = (int)Math.Max(1, Math.Round(Math.Exp(RandomNormal(_p.LogNormMu, _p.LogNormSigma))));
+        // Режим исполнения: рыночный или лимитный с вероятностью 50/50
         var isMarket = _rng.NextDouble() < 0.5;
 
         if (isMarket)
         {
+            // Агрессивное исполнение по лучшим ценам стакана
             var (execs, trs) = _book.ExecuteMarket(side, qty, ts);
             AppendTrades(trs);
             UpdateMidHistory(ts);
@@ -84,11 +106,11 @@ public sealed class MarketSimulator
         }
         else
         {
+            // Лимитный ордер ставится на случайно смещённом уровне от текущего mid
             var priceOffset = Math.Abs(RandomNormal(0, 1.5));
             var signedOff = side == Side.Buy ? -priceOffset : priceOffset;
             var midBase = _book.Mid ?? _startMid;
             var price = Math.Round(midBase + (decimal)signedOff * _p.TickSize, 2);
-
 
             var order = new Order(Guid.NewGuid(), ts, side, price, qty, OrderType.Limit, null);
             var (exs, trs) = _book.AddLimit(order, ts);
@@ -99,7 +121,7 @@ public sealed class MarketSimulator
 
         double RandomNormal(double mu, double sigma)
         {
-            // Box-Muller
+            // Генерация нормального распределения методом Бокса‑Мюллера
             var u1 = 1.0 - _rng.NextDouble();
             var u2 = 1.0 - _rng.NextDouble();
             var randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
@@ -107,6 +129,7 @@ public sealed class MarketSimulator
             return mu + sigma * randStdNormal;
         }
     }
+    // Поддерживает симметричный «домашний» стакан ликвидности вокруг текущего mid
     private void EnsureLiquidity(DateTime ts)
     {
         decimal mid = _book.Mid ?? _startMid;
@@ -120,10 +143,12 @@ public sealed class MarketSimulator
             decimal askPrice = mid + (lvl + 1) * _p.TickSize;
             int     target   = (int)Math.Round(_p.Q0 * Math.Exp(-_p.LambdaDepth * lvl));
 
+            // Подгоняем каждый уровень до целевого объёма
             keep.UnionWith(AdjustLevel(Side.Buy , bidPrice, target, ts));
             keep.UnionWith(AdjustLevel(Side.Sell, askPrice, target, ts));
         }
 
+        // Удаляем из книги заявки, которые больше не нужны для поддержания объёма
         foreach (var id in _houseLiquidity.Except(keep).ToArray())
         {
             _book.Cancel(id, ts).ToList();
@@ -131,16 +156,21 @@ public sealed class MarketSimulator
         }
     }
 
+    // Корректирует объём на определённом ценовом уровне в книге,
+    // выставляя или снимая заявки симулятора
     private IEnumerable<Guid> AdjustLevel(Side side, decimal price, int targetQty, DateTime ts)
     {
+        // Смотрим, сколько лотов по нужной цене уже принадлежит симулятору
         var allAtPrice   = _book.OrdersAtPrice(side, price);
         int houseQty     = allAtPrice.Where(o => _houseLiquidity.Contains(o.Id))
             .Sum(o => o.Quantity);
+        // Расчёт недостающего/избыточного количества
         int delta        = targetQty - houseQty;
         var idsToKeep    = new List<Guid>();
 
         if (delta > 0)
         {
+            // Недостаёт объёма – выставляем дополнительную заявку
             var id = Guid.NewGuid();
             _book.AddLimit(new Order(id, ts, side, price, delta,
                 OrderType.Limit, null), ts);
@@ -151,6 +181,7 @@ public sealed class MarketSimulator
 
         if (delta < 0)
         {
+            // Объёма больше чем нужно – снимаем лишние заявки
             int excess = -delta;
             foreach (var ord in allAtPrice.Where(o => _houseLiquidity.Contains(o.Id)))
             {
@@ -167,6 +198,9 @@ public sealed class MarketSimulator
         return idsToKeep;
     }
 
+    // На основе текущего состояния книги и недавней истории оценить
+    // вероятность прихода очередного покупателя. Метод возвращает вероятность
+    // покупки и направление доминирующей стороны.
     private (double pBuy, Side biasDir) CalcDirectionProb()
     {
         var bidQty = _book.Snapshot(DateTime.MinValue, 3).Bids.Sum(l => l.Quantity);
@@ -191,6 +225,8 @@ public sealed class MarketSimulator
         return (pBuy, imb >= 0 ? Side.Buy : Side.Sell);
     }
 
+    // С небольшой вероятностью снимает существующие заявки,
+    // имитируя уход ликвидности из рынка
     private IEnumerable<ExecutionReport> CancelRandom(DateTime ts)
     {
         var canceled = new List<ExecutionReport>();
@@ -203,6 +239,7 @@ public sealed class MarketSimulator
         return canceled;
     }
 
+    // Добавляем новые сделки в очередь для расчёта краткосрочного тренда
     private void AppendTrades(IEnumerable<Trade> trades)
     {
         foreach (var t in trades)
@@ -212,6 +249,7 @@ public sealed class MarketSimulator
         }
     }
 
+    // Храним историю mid‑цен для оценки долгосрочного отклонения
     private void UpdateMidHistory(DateTime ts)
     {
         var midOpt = _book.Mid;

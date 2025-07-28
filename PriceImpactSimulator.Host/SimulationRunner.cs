@@ -7,15 +7,24 @@ using PriceImpactSimulator.StrategyApi;
 
 namespace PriceImpactSimulator.Host;
 
+// Запускает цикл симуляции: получает команды стратегии, применяет их к книге,
+// передаёт обратную связь и пишет логи.
 public sealed class SimulationRunner
 {
+    // Используемая торговая стратегия
     private readonly IStrategy _strategy;
+    // Контекст с параметрами симуляции, передаваемый стратегии
     private readonly StrategyContext _ctx;
+    // Модуль генерации рыночных событий
     private readonly MarketSimulator _sim;
+    // Книга ордеров, куда пишутся команды и рыночные сделки
     private readonly OrderBook _book;
+    // Приёмник логов (запись CSV)
     private readonly CsvSink _sink;
+    // Шаг симуляции во времени
     private readonly TimeSpan _step;
 
+    // Подготавливает все объекты симуляции и инициализирует стратегию
     public SimulationRunner(
         IStrategy strategy,
         MarketSimulator.SimParams p,
@@ -49,6 +58,8 @@ public sealed class SimulationRunner
         _strategy.Initialize(_ctx);
     }
 
+    // Основной цикл симуляции. На каждом шаге опрашивает рынок и стратегию,
+    // применяет полученные команды и пишет результаты в лог.
     public void Run(TimeSpan duration)
     {
         var now = DateTime.UtcNow;
@@ -99,6 +110,7 @@ public sealed class SimulationRunner
         _sink.Dispose();
     }
 
+    // Помощник для применения отдельной команды стратегии к книге
     private void Apply(OrderCommand cmd, DateTime ts)
     {
         switch (cmd.Type)
