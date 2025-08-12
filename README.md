@@ -1,5 +1,4 @@
 # Price‑Impact‑Oriented Trading Algorithm
-*Author — Oleksandr Tarasyuk*
 
 ![Overview dashboard](./results/main.png)
 
